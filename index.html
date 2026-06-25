@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- 🔧 Ganti judul tab -->
+  <title>PORTOFOLIO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- CURSOR -->
+  <div class="cur" id="cur"></div>
+  <div class="cur-r" id="cur-r"></div>
+
+  <!-- ═══════════════════════ NAV ═══════════════════════ -->
+  <nav id="nav">
+    <div class="logo">dev<em>.</em>aousmawes</div>
+    <ul class="nl">
+      <li><a href="#home">HOME</a></li>
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#projects">PROJECTS</a></li>
+      <li><a href="#ai">AI</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══════════════════════ HOME ═══════════════════════ -->
+  <section id="home">
+    <canvas id="cnv"></canvas>
+    <div class="hi">
+      <p class="hpre"> welcome to my portofolio</p>
+      <!-- 🔧 Ganti "Nama Kamu" di KEDUA tempat di bawah ini -->
+      <h1 class="hname"><span class="gl" data-text="SATRIYA">SATRIYA</span></h1>
+      <p class="hrole">Aku seorang <b id="typed"></b></p>
+      <div class="hbtns">
+        <a href="#projects" class="btn btn-s">🚀 Lihat Project</a>
+        <a href="#about" class="btn btn-g">about me →</a>
+      </div>
+    </div>
+    <div class="scue">
+      <span>SCROLL</span>
+      <div class="sline"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ ABOUT ═══════════════════════ -->
+  <section id="about">
+    <div class="wrap">
+      <div class="sh rv">
+        <span class="se">01 &gt;</span>
+        <h2 class="st">Tentang Aku</h2>
+        <div class="sl"></div>
+      </div>
+
+      <div class="ag">
+        <!-- FOTO -->
+        <div class="rv d1">
+          <div class="pf">
+            <div class="pi">
+              <!--
+              ╔══════════════════════════════════╗
+              ║  🔧 CARA PASANG FOTO:            ║
+              ║  Hapus <div class="pph">…</div>  ║
+              ║  Ganti dengan:                   ║
+              ║  <img src="foto-kamu.jpg"        ║
+              ║       alt="Foto saya" />         ║
+              ╚══════════════════════════════════╝
+            -->
+              <img src="saya.jpeg" alt="Foto saya">
+            </div>
+            <div class="pb"></div>
+          </div>
+        </div>
+
+        <!-- ISI ABOUT -->
+        <div class="ac">
+          <div class="rv d1">
+            <!-- 🔧 Ganti semua teks dengan ceritamu sendiri -->
+            <p class="ap">
+              Hai! Aku <strong>SATRIYA ARIF WIBOWO</strong>, seorang
+              <span class="hl">developer</span> but you can call me Satriya or Rio. Aku masih di usia 17 years
+              dan merupakan anak pertama dari tiga bersaudara. Jadi sebagai anak pertama, aku belajar banyak tentang
+              responsibility dan gimana caranya jadi better version of myself.
+
+              Aku lumayan obsessed sama dunia teknologi karena menurutku future bakal full sama perkembangan tech. Aku
+              juga
+              suka coding, web design, dan gaming. Buat aku, coding isn’t just about typing random code, tapi lebih ke
+              cara
+              buat turning ideas into something cool and alive.
+
+              Aku termasuk orang yang suka explore hal baru dan terus improve diri sendiri. My biggest goal is becoming
+              successful, making my family proud, dan bikin sesuatu yang impactful lewat teknologi di masa depan.
+              <em>"Gimana sih website bisa hidup?"</em>
+            </p>
+            <p class="ap" style="margin-top:1rem">
+              Sejak saat itu saya nggak berhenti belajar. Setiap project adalah
+              petualangan baru, setiap bug adalah puzzle menantang, dan setiap
+              baris kode adalah cara saya bercerita kepada dunia.
+            </p>
+          </div>
+
+          <!-- TIMELINE -->
+          <div class="rv d2">
+            <div class="tl-lbl"> Perjalanan Coding</div>
+            <div class="tl">
+              <!-- 🔧 Ubah tahun & deskripsi sesuai pengalamanmu -->
+              <div class="ti">
+                <div class="ty">2025 november</div>
+                <div class="tdc">
+                  <div class="td"></div>
+                  <div class="tv"></div>
+                </div>
+                <div class="tb">
+                  <div class="tt">Awal Mula — HTML Pertama</div>
+                  <div class="tdsc">Pertama kali nulis kode dan lihat hasilnya di browser. Rasa ajaib yang nggak pernah
+                    hilang sampai sekarang.</div>
+                </div>
+              </div>
+              <div class="ti">
+                <div class="ty">2026 april</div>
+                <div class="tdc">
+                  <div class="td"></div>
+                  <div class="tv"></div>
+                </div>
+                <div class="tb">
+                  <div class="tt">JavaScript &amp; Interaktivitas</div>
+                  <div class="tdsc">Website mulai bisa bergerak dan merespons. Mulai memahami logika pemrograman yang
+                    sesungguhnya.</div>
+                </div>
+              </div>
+              <div class="ti">
+                <div class="ty">2026 mei</div>
+                <div class="tdc">
+                  <div class="td"></div>
+                  <div class="tv"></div>
+                </div>
+                <div class="tb">
+                  <div class="tt">belajar python</div>
+                  <div class="tdsc">mempelajari bahasa isyarat dengan tangan!</div>
+                </div>
+              </div>
+              <div class="ti">
+                <div class="ty">Now ✦</div>
+                <div class="tdc">
+                  <div class="td" style="border-color:var(--acc);box-shadow:0 0 10px var(--acc)"></div>
+                  <div class="tv"></div>
+                </div>
+                <div class="tb">
+                  <div class="tt">Terus Berkembang</div>
+                  <div class="tdsc">Belajar setiap hari, membangun portfolio ini, dan ingin membuat project baru.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SKILLS -->
+          <div class="rv d3">
+            <div class="sk-lbl">Tech Stack</div>
+            <div class="sw">
+              <!-- 🔧 Tambah atau hapus skill sesuai kemampuanmu -->
+              <span class="sk">HTML</span><span class="sk">CSS</span>
+              <span class="sk">JavaScript</span><span class="sk">React</span>
+              <span></span><span class="sk">Python</span>
+              <span></span><span></span>
+              <span class="sk">Git</span><span></span>
+              <span></span><span class="sk">VS Code</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ PROJECTS ═══════════════════════ -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="sh rv">
+        <span class="se">02 &gt;</span>
+        <h2 class="st">Project Saya</h2>
+        <div class="sl"></div>
+      </div>
+
+      <div class="pg">
+        <!-- ★ FEATURED PROJECT -->
+        <div class="pc pc-ft rv">
+          <div>
+            <div class="pcn">// Project Unggulan</div>
+            <!-- 🔧 Ganti dengan info project terbaikmu -->
+            <div class="pci">🌟</div>
+            <h3 class="pcname">Project Unggulan Saya</h3>
+            <p class="pcd">Deskripsikan project terbaikmu di sini! Ceritakan apa yang dibangun, masalah apa yang
+              diselesaikan, dan kenapa ini spesial. Bagian ini langsung menarik perhatian pengunjung portfolio.</p>
+            <div class="pcs">
+              <span class="stag">React</span>
+              <span class="stag">Node.js</span>
+              <span class="stag">MongoDB</span>
+              <span class="stag">REST API</span>
+            </div>
+            <div class="pcl">
+              <a href="https://l.instagram.com/?u=https%3A%2F%2Fportofolio-satriya.vercel.app%2F%3Futm_source%3Dig%26utm_medium%3Dsocial%26utm_content%3Dlink_in_bio%26fbclid%3DPAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQPOTM2NjE5NzQzMzkyNDU5AAGnkl5jcrCZU85udQZ3ojVKbFMhVqWg4-iCJYrlob-ANZo8yI5vvmTedQh3K6c_aem_dFvXO1g76Gvg57rHe27AMg&e=AUCbYmFyOeoGQpx22yHJcZbL-5DjeKpC5hKLt0pYLqsfvlfaR7WsQu-pGIYZx_BgvP7odV1msfiVKbhrp0HSc2bwy8KU1VbkUlGLdXzxg64lwU5_wbECCZsEfgkAaWB1NYT_DX4"
+                class="pla">↗ Live Demo</a>
+              <a href="#" class="pla">⎇ GitHub</a>
+            </div>
+          </div>
+          <!-- Code preview -->
+          <div class="cpre">
+            <span class="cc">// project snapshot</span><br><br>
+            <span class="ck">const</span> project = {<br>
+            &nbsp;&nbsp;name: <span class="cs">"Project Unggulan"</span>,<br>
+            &nbsp;&nbsp;status:<span class="cs"> "live 🚀"</span>,<br>
+            &nbsp;&nbsp;built: <span class="cs">"with passion"</span>,<br>
+            &nbsp;&nbsp;stack: [<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="cs">"React"</span>,<span class="cs"> "Node"</span><br>
+            &nbsp;&nbsp;]<br>
+            }<br><br>
+            <span class="ck">export default</span> project;
+          </div>
+        </div>
+
+        <!-- 🔧 GANTI SETIAP CARD DENGAN PROJECT ASLIMU -->
+        <div class="pc rv d1">
+          <div class="pcn">// 01</div>
+          <div class="pci">🛒</div>
+          <h3 class="pcname">Nama Project Pertama</h3>
+          <p class="pcd">Deskripsi singkat project. Apa yang bisa dilakukan? Siapa yang pakai? Apa hasilnya? Bikin
+            pembaca penasaran!</p>
+          <div class="pcs">
+            <span class="stag">HTML</span><span class="stag">CSS</span><span class="stag">JavaScript</span>
+          </div>
+          <div class="pcl">
+            <a href="#" class="pla">↗ Demo</a>
+            <a href="#" class="pla">⎇ Code</a>
+          </div>
+        </div>
+
+        <div class="pc rv d2">
+          <div class="pcn">// 02</div>
+          <div class="pci">📱</div>
+          <h3 class="pcname">Nama Project Kedua</h3>
+          <p class="pcd">Ceritakan tentang project kedua. Teknologi apa yang dipakai? Apa yang bikin keren? Tantangan
+            apa yang berhasil diatasi?</p>
+          <div class="pcs">
+            <span class="stag">React</span><span class="stag">Firebase</span><span class="stag">Tailwind</span>
+          </div>
+          <div class="pcl">
+            <a href="#" class="pla">↗ Demo</a>
+            <a href="#" class="pla">⎇ Code</a>
+          </div>
+        </div>
+
+        <div class="pc rv d3">
+          <div class="pcn">// 03</div>
+          <div class="pci">🤖</div>
+          <h3 class="pcname">Nama Project Ketiga</h3>
+          <p class="pcd">Project AI, automation, atau apapun yang kamu banggakan. Tambah kartu project baru dengan
+            copy-paste blok ini!</p>
+          <div class="pcs">
+            <span class="stag">Python</span><span class="stag">Flask</span><span class="stag">AI</span>
+          </div>
+          <div class="pcl">
+            <a href="#" class="pla">↗ Demo</a>
+            <a href="#" class="pla">⎇ Code</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ AI ═══════════════════════ -->
+  <section id="ai">
+    <div class="wrap">
+      <div class="sh rv"
+        style="flex-direction:column;align-items:center;text-align:center;gap:.5rem;margin-bottom:1.5rem">
+        <span class="se">03 &gt;</span>
+        <h2 class="st">Tanya AI Tentang Aku</h2>
+      </div>
+      <p class="ai-sub rv">Penasaran tentang saya? Tanya langsung ke AI yang sudah saya latih untuk menjawab pertanyaan
+        seputar pengalaman, skill, dan project saya! 🤖</p>
+      <p class="ai-sub rv">!!!! BLM SEMPURNA JANGAN DIPAKE DAHULU !!!!</p>
+      <div class="cb rv">
+        <div class="ct">
+          <div class="gd"></div>
+          <span class="cn">AI Porto Assistant — Online</span>
+        </div>
+        <div class="cm" id="cm">
+          <div class="msg">
+            <div class="av av-ai">AI</div>
+            <div class="bub">Halo! 👋 Aku AI assistant dari portfolio ini. Tanya apa saja tentang pemilik portofolio —
+              skill, project, pengalaman,
+              atau hal lain yang ingin kamu ketahui!</div>
+
+          </div>
+        </div>
+        <div class="suggs" id="sgg">
+          <button class="sg" onclick="qsend(this)">Apa skill utamamu?</button>
+          <button class="sg" onclick="qsend(this)">Kapan mulai coding?</button>
+          <button class="sg" onclick="qsend(this)">Project terbaikmu apa?</button>
+          <button class="sg" onclick="qsend(this)">Apa yang lagi dipelajari?</button>
+        </div>
+        <div class="cf">
+          <input type="text" id="ci" placeholder="Tulis pertanyaan..." />
+          <button id="sb" onclick="send()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="an" id="an">
+        ⚠ Untuk mengaktifkan AI chat saat di-deploy di luar Claude, masukkan Anthropic API Key:
+        <div class="ar">
+          <input type="password" class="aki" id="aki" placeholder="sk-ant-api03-..." />
+          <button class="asv" onclick="saveK()">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+  <footer>
+    <div class="fl">dev<em>.</em>aousmawes</div>
+    <p class="ft">Dibangun dengan 🖤 dan banyak ☕ — 2024</p>
+    <div class="fs">
+      <!-- 🔧 Ganti href="#" dengan link aslimu -->
+      <a href="#">GitHub</a>
+      <a href="#">LinkedIn</a>
+      <a href="https://www.instagram.com/exologyoo?igsh=MW5xN2pvNGpvcW1tdg==">Instagram</a>
+      <a href="#">Email</a>
+    </div>
+  </footer>
+
+
+
+  <audio id="backgroundMusic" loop>
+    <source src="dunia yang nanti.mp4" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <script src="script.js"></script>
+</body>
+
+</html>
