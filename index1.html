@@ -1,0 +1,578 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+  <title>Portfolio — Intro</title>
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+ 
+  <style>
+    /* ── Reset & Tokens ────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+    :root {
+      --bg:      #0A0A12;
+      --primary: #7B6FFF;
+      --accent:  #00CFC0;
+      --text:    #F0F0FF;
+      --muted:   #6B6B8A;
+    }
+ 
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+ 
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+ 
+    /* ── Canvas ────────────────────────────────────────────────── */
+    #three-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      display: block;
+    }
+ 
+    /* ── Progress bar ──────────────────────────────────────────── */
+    #progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 1.5px;
+      width: 0%;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      z-index: 60;
+      transition: opacity 0.6s ease;
+    }
+ 
+    /* ── Corner brackets ───────────────────────────────────────── */
+    .corner {
+      position: fixed;
+      z-index: 8;
+      opacity: 0;
+      animation: aFadeIn 1.2s ease forwards 0.4s;
+      pointer-events: none;
+    }
+    .corner--tl { top: 1.6rem; left: 1.6rem; }
+    .corner--tr { top: 1.6rem; right: 1.6rem; }
+    .corner--bl { bottom: 1.6rem; left: 1.6rem; }
+    .corner--br { bottom: 1.6rem; right: 1.6rem; }
+ 
+    /* ── Skip button ───────────────────────────────────────────── */
+    #skip-btn {
+      position: fixed;
+      top: 1.4rem;
+      right: 4.5rem;
+      z-index: 20;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      opacity: 0;
+      animation: aFadeIn 0.8s ease forwards 3.2s;
+      transition: color 0.25s;
+      padding: 0.4rem;
+    }
+    #skip-btn:hover { color: var(--text); }
+ 
+    /* ── Hero ──────────────────────────────────────────────────── */
+    .hero {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      pointer-events: none;
+    }
+ 
+    /* Eyebrow */
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.1rem;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: aSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.9s;
+    }
+    .eyebrow__bar {
+      display: block;
+      width: 26px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .eyebrow__text {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+ 
+    /* Name */
+    .hero__name {
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.85rem;
+      background: linear-gradient(
+        140deg,
+        #ffffff 0%,
+        #d0c8ff 38%,
+        var(--primary) 68%,
+        var(--accent) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      transform: translateY(22px);
+      animation: aSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.2s;
+    }
+ 
+    /* Role */
+    .hero__role {
+      font-size: clamp(0.78rem, 1.8vw, 0.94rem);
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: aSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 1.55s;
+    }
+ 
+    /* Divider */
+    .hero__divider {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(to bottom, transparent, rgba(107,107,138,0.4), transparent);
+      margin: 1.7rem 0;
+      opacity: 0;
+      animation: aFadeIn 0.5s ease forwards 1.85s;
+    }
+ 
+    /* CTA button */
+    .cta-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.72em 2em;
+      background: transparent;
+      border: 1px solid rgba(123, 111, 255, 0.38);
+      border-radius: 100px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      pointer-events: auto;
+      opacity: 0;
+      transform: translateY(14px);
+      animation: aSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards 2.1s;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.25s;
+      overflow: hidden;
+    }
+    .cta-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(123,111,255,0.15), rgba(0,207,192,0.08));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .cta-btn:hover {
+      border-color: rgba(123, 111, 255, 0.7);
+      box-shadow: 0 0 26px rgba(123, 111, 255, 0.2), inset 0 0 16px rgba(123,111,255,0.04);
+      transform: translateY(-3px);
+    }
+    .cta-btn:hover::after { opacity: 1; }
+    .cta-btn__arrow {
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cta-btn:hover .cta-btn__arrow { transform: translateX(5px); }
+ 
+    /* ── Bottom labels ─────────────────────────────────────────── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 1.6rem;
+      left: 0; right: 0;
+      z-index: 8;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4rem;
+      pointer-events: none;
+      opacity: 0;
+      animation: aFadeIn 0.8s ease forwards 2.8s;
+    }
+    .bottom-bar span {
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+ 
+    /* ── Transition overlay ────────────────────────────────────── */
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #overlay.show { opacity: 1; pointer-events: auto; }
+ 
+    /* ── Keyframes ─────────────────────────────────────────────── */
+    @keyframes aSlideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes aFadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- Progress bar -->
+  <div id="progress"></div>
+ 
+  <!-- Three.js canvas -->
+  <canvas id="three-canvas"></canvas>
+ 
+  <!-- Corner brackets -->
+  <div class="corner corner--tl">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <path d="M35 1H1V35" stroke="#7B6FFF" stroke-width="1" stroke-opacity="0.42"/>
+    </svg>
+  </div>
+  <div class="corner corner--tr">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <path d="M1 1H35V35" stroke="#7B6FFF" stroke-width="1" stroke-opacity="0.42"/>
+    </svg>
+  </div>
+  <div class="corner corner--bl">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <path d="M35 35H1V1" stroke="#7B6FFF" stroke-width="1" stroke-opacity="0.42"/>
+    </svg>
+  </div>
+  <div class="corner corner--br">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <path d="M1 35H35V1" stroke="#7B6FFF" stroke-width="1" stroke-opacity="0.42"/>
+    </svg>
+  </div>
+ 
+  <!-- Skip button -->
+  <button id="skip-btn" onclick="enterSite()">Skip →</button>
+ 
+  <!-- Hero content -->
+  <main class="hero">
+    <div class="eyebrow">
+      <span class="eyebrow__bar"></span>
+      <span class="eyebrow__text">welcome</span>
+      <span class="eyebrow__bar"></span>
+    </div>
+ 
+    <!-- ✏️ EDIT: Ganti dengan nama Anda -->
+    <h1 class="hero__name">my website</h1>
+ 
+    <!-- ✏️ EDIT: Ganti dengan keahlian Anda -->
+    <p class="hero__role"> Developer website &nbsp; &nbsp; software engineer &nbsp; &nbsp; Creative Technologist</p>
+ 
+    <div class="hero__divider"></div>
+ 
+    <!-- ✏️ EDIT: Fungsi enterSite() ada di bawah, ganti URL-nya -->
+    <button class="cta-btn" onclick="enterSite()">
+      Masuk ke Portfolio
+      <span class="cta-btn__arrow">→</span>
+    </button>
+  </main>
+ 
+  <!-- Bottom labels -->
+  <div class="bottom-bar">
+    <!-- ✏️ EDIT: Ubah teks sesuai kebutuhan -->
+    <span>Portfolio 2026</span>
+    <span> Developer</span>
+  </div>
+ 
+  <!-- Exit overlay -->
+  <div id="overlay"></div>
+ 
+  <!-- Three.js r128 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+ 
+  <script>
+    /* ============================================================
+       THREE.JS — SCENE SETUP
+       ============================================================ */
+    const canvas = document.getElementById('three-canvas');
+ 
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x0A0A12, 1);
+ 
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.1, 200
+    );
+    camera.position.set(0, 0, 6.5);
+ 
+    /* Subtle depth fog */
+    scene.fog = new THREE.FogExp2(0x0A0A12, 0.028);
+ 
+    /* ── Icosahedron (inner solid layer) ───────────────────────── */
+    const GEO_ICO = new THREE.IcosahedronGeometry(1.9, 1);
+ 
+    const matSolid = new THREE.MeshBasicMaterial({
+      color: 0x7B6FFF,
+      transparent: true,
+      opacity: 0,
+      side: THREE.DoubleSide,
+    });
+    const meshSolid = new THREE.Mesh(GEO_ICO, matSolid);
+    scene.add(meshSolid);
+ 
+    /* ── Icosahedron (primary wireframe) ───────────────────────── */
+    const matWire = new THREE.MeshBasicMaterial({
+      color: 0x7B6FFF,
+      wireframe: true,
+      transparent: true,
+      opacity: 0,
+    });
+    const meshWire = new THREE.Mesh(GEO_ICO, matWire);
+    scene.add(meshWire);
+ 
+    /* ── Outer shell (teal, counter-rotates) ───────────────────── */
+    const GEO_OUTER = new THREE.IcosahedronGeometry(2.22, 1);
+    const matOuter  = new THREE.MeshBasicMaterial({
+      color: 0x00CFC0,
+      wireframe: true,
+      transparent: true,
+      opacity: 0,
+    });
+    const meshOuter = new THREE.Mesh(GEO_OUTER, matOuter);
+    scene.add(meshOuter);
+ 
+    /* ── Orbital particle rings ─────────────────────────────────── */
+    function makeRing(count, rMin, rMax, color, size, tiltZ) {
+      const pos = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi   = Math.acos(2 * Math.random() - 1);
+        const r     = rMin + Math.random() * (rMax - rMin);
+        pos[i * 3    ] = r * Math.sin(phi) * Math.cos(theta);
+        pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        pos[i * 3 + 2] = r * Math.cos(phi);
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const mat = new THREE.PointsMaterial({
+        color,
+        size,
+        transparent: true,
+        opacity: 0,
+        sizeAttenuation: true,
+      });
+      const pts = new THREE.Points(geo, mat);
+      pts.rotation.z = tiltZ;
+      return pts;
+    }
+ 
+    const ring1 = makeRing(480, 3.0, 3.9, 0x7B6FFF, 0.046, 0.30);
+    const ring2 = makeRing(240, 4.4, 5.5, 0x00CFC0, 0.035, -0.52);
+    const ring3 = makeRing(110, 6.0, 7.8, 0xFFFFFF, 0.024, 0.90);
+    scene.add(ring1, ring2, ring3);
+ 
+    /* ── Background star field ──────────────────────────────────── */
+    {
+      const N   = 3500;
+      const pos = new Float32Array(N * 3);
+      for (let i = 0; i < N; i++) {
+        pos[i * 3    ] = (Math.random() - 0.5) * 80;
+        pos[i * 3 + 1] = (Math.random() - 0.5) * 80;
+        pos[i * 3 + 2] = (Math.random() - 0.5) * 40 - 15;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const mat = new THREE.PointsMaterial({
+        color: 0xFFFFFF,
+        size: 0.018,
+        transparent: true,
+        opacity: 0.22,
+        sizeAttenuation: true,
+      });
+      scene.add(new THREE.Points(geo, mat));
+    }
+ 
+    /* ── Mouse tracking ─────────────────────────────────────────── */
+    const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+    window.addEventListener('mousemove', e => {
+      mouse.tx = (e.clientX / window.innerWidth  - 0.5) * 2;
+      mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+ 
+    /* ── Touch tracking (mobile) ────────────────────────────────── */
+    window.addEventListener('touchmove', e => {
+      const t = e.touches[0];
+      mouse.tx = (t.clientX / window.innerWidth  - 0.5) * 2;
+      mouse.ty = (t.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+ 
+    /* ── Animation state ────────────────────────────────────────── */
+    let t0        = null;   // timestamp of first frame
+    let exploding = false;  // exit sequence active
+    let exTime    = 0;      // time since explode started
+ 
+    /* ── Render loop ────────────────────────────────────────────── */
+    function animate(ts) {
+      requestAnimationFrame(animate);
+      if (!t0) t0 = ts;
+      const t = (ts - t0) / 1000; // elapsed seconds
+ 
+      /* Smooth mouse lerp */
+      mouse.x += (mouse.tx - mouse.x) * 0.042;
+      mouse.y += (mouse.ty - mouse.y) * 0.042;
+ 
+      /* Reveal curve: starts at 0.8s, rises over 1.8s, ease-out cubic */
+      const raw    = Math.max(0, (t - 0.8) / 1.8);
+      const reveal = 1 - Math.pow(1 - Math.min(raw, 1), 3);
+ 
+      if (!exploding) {
+        matSolid.opacity        = reveal * 0.05;
+        matWire.opacity         = reveal * 0.50;
+        matOuter.opacity        = reveal * 0.13;
+        ring1.material.opacity  = reveal * 0.50;
+        ring2.material.opacity  = reveal * 0.36;
+        ring3.material.opacity  = reveal * 0.20;
+      }
+ 
+      /* Breathing pulse on the core */
+      const pulse = 1 + Math.sin(t * 1.35) * 0.024;
+      meshWire.scale.setScalar(pulse);
+      meshSolid.scale.setScalar(pulse);
+ 
+      /* Rotation */
+      meshWire.rotation.x   =  t * 0.16 + mouse.y * 0.15;
+      meshWire.rotation.y   =  t * 0.24 + mouse.x * 0.15;
+      meshSolid.rotation.copy(meshWire.rotation);
+      meshOuter.rotation.x  = -t * 0.09 + mouse.y * 0.07;
+      meshOuter.rotation.y  = -t * 0.17 + mouse.x * 0.07;
+ 
+      /* Particle orbits */
+      ring1.rotation.y  =  t * 0.09;
+      ring1.rotation.x  =  t * 0.05;
+      ring2.rotation.y  = -t * 0.07;
+      ring2.rotation.z +=  0.0003;
+      ring3.rotation.x  =  t * 0.04;
+      ring3.rotation.y  =  t * 0.06;
+ 
+      /* Camera parallax */
+      camera.position.x += (mouse.x * 0.55 - camera.position.x) * 0.025;
+      camera.position.y += (-mouse.y * 0.40 - camera.position.y) * 0.025;
+      camera.lookAt(0, 0, 0);
+ 
+      /* ── Exit explosion ─────────────────────────────────────── */
+      if (exploding) {
+        exTime += 0.038;
+        const ep = Math.min(exTime, 1);
+ 
+        matWire.opacity  = Math.max(0, 0.50 * (1 - ep * 2.0));
+        matOuter.opacity = Math.max(0, 0.13 * (1 - ep * 2.0));
+        matSolid.opacity = Math.max(0, 0.05 * (1 - ep * 2.0));
+ 
+        const sc = 1 + ep * 4.8;
+        meshWire.scale.setScalar(sc);
+        meshOuter.scale.setScalar(sc * 1.12);
+        meshSolid.scale.setScalar(sc);
+ 
+        ring1.material.opacity = Math.max(0, 0.50 * (1 - ep * 1.6));
+        ring2.material.opacity = Math.max(0, 0.36 * (1 - ep * 1.6));
+        ring3.material.opacity = Math.max(0, 0.20 * (1 - ep * 1.6));
+        ring1.scale.setScalar(1 + ep * 2.0);
+        ring2.scale.setScalar(1 + ep * 2.8);
+        ring3.scale.setScalar(1 + ep * 3.5);
+      }
+ 
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(animate);
+ 
+    /* ── Resize ─────────────────────────────────────────────────── */
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+ 
+    /* ── Cosmetic progress bar ──────────────────────────────────── */
+    const bar  = document.getElementById('progress');
+    let   prog = 0;
+    const tick = setInterval(() => {
+      prog = Math.min(100, prog + (Math.random() * 10 + 2));
+      bar.style.width = prog + '%';
+      if (prog >= 100) {
+        clearInterval(tick);
+        setTimeout(() => { bar.style.opacity = '0'; }, 600);
+      }
+    }, 110);
+ 
+    /* ── Enter site ─────────────────────────────────────────────── */
+    function enterSite() {
+      if (exploding) return;
+      exploding = true;
+ 
+      /* Fade out all UI text */
+      document.querySelectorAll('.hero, .bottom-bar, #skip-btn, .corner').forEach(el => {
+        el.style.transition = 'opacity 0.4s ease';
+        el.style.opacity    = '0';
+      });
+ 
+      /* After short delay, overlay fades in, then redirect */
+      setTimeout(() => {
+        document.getElementById('overlay').classList.add('show');
+        setTimeout(() => {
+          /* ✏️ EDIT: Ganti dengan URL halaman utama portfolio Anda */
+          window.location.href = 'index.html';
+        }, 900);
+      }, 360);
+    }
+ 
+    /* ── Keyboard shortcut (Enter / Space → enter site) ─────────── */
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') enterSite();
+    });
+  </script>
+</body>
+</html>
+ 
