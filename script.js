@@ -75,9 +75,9 @@ for (let i=0;i<100;i++) { const p=new Pt(); pts.push(p); }
    TYPEWRITER
 ═══════════════════════════════════════ */
 const ROLES = [
-  'Full Stack Developer 💻',
-  'software enggineering 💡',
-  'developer website 🔧',
+  'Full Stack Developer ',
+  'software enggineering ',
+  'developer website ',
 ];
 let ri=0, ci=0, fwd=true;
 const typEl = document.getElementById('typed');
@@ -119,109 +119,211 @@ document.querySelectorAll('.pc').forEach(c => {
   c.addEventListener('mouseleave', () => c.style.transform='');
 });
 
-/* ═══════════════════════════════════════
-   AI CHAT
-═══════════════════════════════════════ */
-/*
-  🔧 PENTING — Ganti teks di dalam SYS ini dengan info lengkap tentang dirimu!
-  Ini yang akan dipakai AI untuk menjawab pertanyaan pengunjung.
-*/
-const SYS = `Kamu adalah AI assistant untuk portfolio seorang developer.
+/* ==========================================
+   AI CHAT (GRATIS TANPA API)
+========================================== */
 
-Informasi lengkap tentang pemilik portfolio:
-- Nama: [satriya arif wibowo] — GANTI INI!
-- Lokasi: [Kota, Indonesia] — GANTI INI!
-- Role: Full Stack Developer yang passionate
-- Skill utama: HTML, CSS, JavaScript, React, Node.js, Python, MySQL, MongoDB, Git, Tailwind CSS
-- Mulai belajar coding: 2021 dari HTML dasar
-- 2022: Belajar JavaScript, mulai memahami pemrograman interaktif
-- 2023: Masuk ke Full Stack development, project pertama live dan bisa diakses publik
-- Sekarang: Aktif membangun project, terus belajar teknologi baru
-- Project unggulan: [Sebutkan nama & deskripsi project terbaikmu di sini]
-- Hobi & kepribadian: [Tambahkan di sini — misal: suka musik, gaming, dll]
-- Bisa dihubungi lewat: GitHub, LinkedIn, Instagram, Email
+const profile = {
+    nama: "Satriya Arif Wibowo",
+    umur: "17 Tahun",
+    sekolah: "SMK Sejahtera Surabaya",
+    jurusan: "TJKT",
+    kelas: "XI TJKT",
+    lokasi: "dimana ya enaknya",
+    
 
-Cara kamu menjawab:
-- Bahasa Indonesia yang casual, friendly, dan singkat
-- Jika tidak tahu detail spesifik, katakan jujur tapi tetap ramah
-- Hanya jawab pertanyaan terkait pemilik portfolio ini
-- Gunakan emoji sesekali biar terasa lebih hidup`;
+    role: "Full Stack Developer",
 
-let apiKey = localStorage.getItem('_pk') || '';
+    skill: [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "Python",
+        "MySQL",
+        "Git",
+        "Tailwind CSS"
+    ],
+
+    project: [
+        "Portfolio Website",
+        "Album Kelas",
+        "Shoot Love"
+    ],
+
+    hobi: [
+        "Coding",
+        "Gaming",
+        "Web Design"
+    ],
+
+    github: "https://github.com/satriya-project",
+    instagram: "@username_kamu",
+    email: "emailkamu@gmail.com"
+};
 
 function addMsg(role, html) {
-  const box = document.getElementById('cm');
-  const d = document.createElement('div');
-  d.className = 'msg' + (role==='u'?' u':'');
-  d.innerHTML = `<div class="av av-${role}">${role==='u'?'U':'AI'}</div><div class="bub">${html}</div>`;
-  box.appendChild(d);
-  box.scrollTop = box.scrollHeight;
-  return d;
+    const box = document.getElementById("cm");
+
+    const d = document.createElement("div");
+
+    d.className = "msg" + (role === "u" ? " u" : "");
+
+    d.innerHTML = `
+        <div class="av av-${role}">${role === "u" ? "U" : "AI"}</div>
+        <div class="bub">${html}</div>
+    `;
+
+    box.appendChild(d);
+    box.scrollTop = box.scrollHeight;
+
+    return d;
 }
 
 function typing() {
-  return addMsg('ai', '<div class="dots"><span></span><span></span><span></span></div>');
+    return addMsg(
+        "ai",
+        `<div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>`
+    );
 }
 
-async function send() {
-  const input = document.getElementById('ci');
-  const txt = input.value.trim();
-  if (!txt) return;
-  input.value = '';
-  document.getElementById('sgg').style.display = 'none';
-  addMsg('u', txt);
-  const t = typing();
+function getAnswer(text) {
 
-  const h = { 'Content-Type': 'application/json' };
-  if (apiKey) {
-    h['x-api-key'] = apiKey;
-    h['anthropic-version'] = '2023-06-01';
-    h['anthropic-dangerous-direct-browser-access'] = 'true';
-  }
+    text = text.toLowerCase();
 
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: h,
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 512,
-        system: SYS,
-        messages: [{ role: 'user', content: txt }]
-      })
-    });
-    t.remove();
-    if (res.status===401||res.status===403) {
-      document.getElementById('an').classList.add('show');
-      addMsg('ai','Perlu API key buat chat di luar Claude. Masukkan di bawah ya! 🔑');
-      return;
+    let jawaban = [];
+
+    if (text.includes("nama") || text.includes("siapa kamu")) {
+        jawaban.push(`👤 Nama saya <b>${profile.nama}</b>.`);
     }
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || 'Hmm ada yang salah. Coba lagi ya!';
-    addMsg('ai', reply.replace(/\n/g,'<br>'));
-  } catch {
-    t.remove();
-    document.getElementById('an').classList.add('show');
-    addMsg('ai','Kayaknya perlu API key nih. Masukkan di bawah untuk aktifkan chat! 🔑');
-  }
+
+    if (text.includes("umur") || text.includes("usia")) {
+        jawaban.push(` Umur saya ${profile.umur}.`);
+    }
+
+    if (text.includes("sekolah")) {
+        jawaban.push(` Saya bersekolah di <b>${profile.sekolah}</b>.`);
+    }
+
+    if (text.includes("kelas")) {
+        jawaban.push(` Saya kelas ${profile.kelas}.`);
+    }
+
+    if (text.includes("jurusan")) {
+        jawaban.push(` Saya mengambil jurusan ${profile.jurusan}.`);
+    }
+
+    if (
+        text.includes("tinggal") ||
+        text.includes("lokasi") ||
+        text.includes("asal")
+    ) {
+        jawaban.push(` Saya berasal dari ${profile.lokasi}.`);
+    }
+
+    if (
+        text.includes("skill") ||
+        text.includes("keahlian") ||
+        text.includes("bisa apa")
+    ) {
+        jawaban.push(
+            "⚡ Skill saya:<br><br>• " + profile.skill.join("<br>• ")
+        );
+    }
+
+    if (
+        text.includes("project") ||
+        text.includes("portfolio") ||
+        text.includes("karya")
+    ) {
+        jawaban.push(
+            "🚀 Project yang pernah saya buat:<br><br>• " +
+            profile.project.join("<br>• ")
+        );
+    }
+
+    if (text.includes("hobi")) {
+        jawaban.push(
+            "🎮 Hobi saya:<br><br>• " + profile.hobi.join("<br>• ")
+        );
+    }
+
+    if (text.includes("github")) {
+        jawaban.push(
+            `🐙 Github saya:<br><a href="${profile.github}" target="_blank">${profile.github}</a>`
+        );
+    }
+
+    if (text.includes("instagram")) {
+        jawaban.push(` Instagram saya ${profile.instagram}`);
+    }
+
+    if (text.includes("email")) {
+        jawaban.push(`📧 Email saya ${profile.email}`);
+    }
+
+    if (
+        text.includes("halo") ||
+        text.includes("hai") ||
+        text.includes("hi")
+    ) {
+        jawaban.push("Halo 👋 Ada yang ingin kamu ketahui tentang saya?");
+    }
+
+    if (jawaban.length === 0) {
+        return "Maaf, saya belum mempunyai informasi mengenai pertanyaan tersebut. Coba tanyakan tentang nama, sekolah, skill, project, Github, hobi, atau kontak.";
+    }
+
+    return jawaban.join("<br><br>");
 }
 
-function qsend(btn) { document.getElementById('ci').value = btn.textContent; send(); }
+function send() {
 
-function saveK() {
-  const k = document.getElementById('aki').value.trim();
-  if (k.startsWith('sk-ant-')) {
-    apiKey = k;
-    localStorage.setItem('_pk', k);
-    document.getElementById('an').classList.remove('show');
-    addMsg('ai','✅ API key tersimpan! Sekarang kamu bisa tanya apa saja tentang pemilik portfolio ini 🚀');
-  } else {
-    alert('Format key tidak valid. Harus dimulai dengan "sk-ant-"');
-  }
+    const input = document.getElementById("ci");
+
+    const txt = input.value.trim();
+
+    if (!txt) return;
+
+    input.value = "";
+
+    document.getElementById("sgg").style.display = "none";
+
+    addMsg("u", txt);
+
+    const bubble = typing();
+
+    setTimeout(() => {
+
+        bubble.remove();
+
+        addMsg("ai", getAnswer(txt));
+
+    }, 700);
+
 }
 
-document.getElementById('ci').addEventListener('keypress', e => { if (e.key==='Enter') send(); });
+function qsend(btn) {
+    document.getElementById("ci").value = btn.textContent;
+    send();
+}
 
+document
+    .getElementById("ci")
+    .addEventListener("keypress", function (e) {
+
+        if (e.key === "Enter") {
+
+            send();
+
+        }
+
+    });
 
 
 function setupMusic() {
