@@ -127,7 +127,7 @@ const profile = {
     nama: "Satriya Arif Wibowo",
     umur: "17 Tahun",
     sekolah: "SMK Sejahtera Surabaya",
-    jurusan: "TJKT",
+    jurusan: "TJKT ( Teknik Jaringan Komputer dan Telekomunikasi )",
     kelas: "XI TJKT",
     lokasi: "bumi",
     email: "anjaidimasmabarselebew@gmail.com",
