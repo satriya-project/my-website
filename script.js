@@ -129,8 +129,10 @@ const profile = {
     sekolah: "SMK Sejahtera Surabaya",
     jurusan: "TJKT",
     kelas: "XI TJKT",
-    lokasi: "dimana ya enaknya",
-    
+    lokasi: "bumi",
+    email: "anjaidimasmabarselebew@gmail.com",
+    whatsapp: "nono privasi",
+    coding: "dari situ saya tertarik dan masih suka ngoding sampe sekarang",
 
     role: "Full Stack Developer",
 
@@ -148,19 +150,20 @@ const profile = {
 
     project: [
         "Portfolio Website",
-        "Album Kelas",
+        "Album keluarga",
         "Shoot Love"
     ],
 
     hobi: [
         "Coding",
         "Gaming",
-        "Web Design"
+        "jalan jalan",
+        "dengerin musik"
     ],
 
     github: "https://github.com/satriya-project",
-    instagram: "@username_kamu",
-    email: "emailkamu@gmail.com"
+    instagram: "@exologyoo",
+    email: "anjaidimasmabarselebew@gmail.com"
 };
 
 function addMsg(role, html) {
@@ -199,23 +202,30 @@ function getAnswer(text) {
     let jawaban = [];
 
     if (text.includes("nama") || text.includes("siapa kamu")) {
-        jawaban.push(`👤 Nama saya <b>${profile.nama}</b>.`);
+        jawaban.push(`Nama saya <b>${profile.nama}</b>.`);
     }
 
+if (text.includes("coding") || text.includes("mulai kapan")) {
+        jawaban.push(`saya memulai coding dari tahun 2025 itu karena saya
+           penasaran sama disuruh ayah untuk belajar codingan buat bekal masa depan sama saya belajar dari dea afrizal... codingan awal aku membuat cuman ya gitu foto 
+           saya pencet nanti bisa berpindah ke youtube ataupun ke sosmed ${profile.coding}.`);
+    }
+
+
     if (text.includes("umur") || text.includes("usia")) {
-        jawaban.push(` Umur saya ${profile.umur}.`);
+        jawaban.push(` Umur aku ${profile.umur}.`);
     }
 
     if (text.includes("sekolah")) {
-        jawaban.push(` Saya bersekolah di <b>${profile.sekolah}</b>.`);
+        jawaban.push(`  bersekolah di <b>${profile.sekolah}</b>.`);
     }
 
     if (text.includes("kelas")) {
-        jawaban.push(` Saya kelas ${profile.kelas}.`);
+        jawaban.push(` kelas ${profile.kelas}.`);
     }
 
     if (text.includes("jurusan")) {
-        jawaban.push(` Saya mengambil jurusan ${profile.jurusan}.`);
+        jawaban.push(` Saya jurusan ${profile.jurusan}.`);
     }
 
     if (
@@ -223,7 +233,7 @@ function getAnswer(text) {
         text.includes("lokasi") ||
         text.includes("asal")
     ) {
-        jawaban.push(` Saya berasal dari ${profile.lokasi}.`);
+        jawaban.push(` berasal dari ${profile.lokasi}.`);
     }
 
     if (
@@ -232,9 +242,14 @@ function getAnswer(text) {
         text.includes("bisa apa")
     ) {
         jawaban.push(
-            "⚡ Skill saya:<br><br>• " + profile.skill.join("<br>• ")
+            " Skill saya:<br><br>• " + profile.skill.join("<br>• ")
         );
     }
+
+ if (text.includes("nomor") || text.includes("wa") || text.includes("whatsapp")) {
+        jawaban.push(` hayo kepo wkwkwk... ${profile.whatsapp}`);
+    }
+
 
     if (
         text.includes("project") ||
@@ -242,29 +257,30 @@ function getAnswer(text) {
         text.includes("karya")
     ) {
         jawaban.push(
-            "🚀 Project yang pernah saya buat:<br><br>• " +
+            " Project yang pernah saya buat:<br><br>• " +
             profile.project.join("<br>• ")
         );
     }
 
     if (text.includes("hobi")) {
         jawaban.push(
-            "🎮 Hobi saya:<br><br>• " + profile.hobi.join("<br>• ")
+            " Hobi saya:<br><br>• " + profile.hobi.join("<br>• ")
         );
     }
 
     if (text.includes("github")) {
         jawaban.push(
-            `🐙 Github saya:<br><a href="${profile.github}" target="_blank">${profile.github}</a>`
+            ` Github saya:<br><a href="${profile.github}" target="_blank">${profile.github}</a>`
         );
     }
 
-    if (text.includes("instagram")) {
-        jawaban.push(` Instagram saya ${profile.instagram}`);
+   if (text.includes("instagram") || text.includes("ig")) {
+        jawaban.push(`  jangan lupa difollow ya jangan di stalk doang ${profile.instagram}`);
     }
 
+
     if (text.includes("email")) {
-        jawaban.push(`📧 Email saya ${profile.email}`);
+        jawaban.push(` Email saya ${profile.email}`);
     }
 
     if (
@@ -272,11 +288,11 @@ function getAnswer(text) {
         text.includes("hai") ||
         text.includes("hi")
     ) {
-        jawaban.push("Halo 👋 Ada yang ingin kamu ketahui tentang saya?");
+        jawaban.push("Halo Ada yang ingin kamu ketahui tentang saya?");
     }
 
     if (jawaban.length === 0) {
-        return "Maaf, saya belum mempunyai informasi mengenai pertanyaan tersebut. Coba tanyakan tentang nama, sekolah, skill, project, Github, hobi, atau kontak.";
+        return "Maaf, saya belum mempunyai informasi mengenai pertanyaan tersebut. Coba tanyakan tentang nama, sekolah, skill, project, Github, hobi.";
     }
 
     return jawaban.join("<br><br>");
@@ -325,6 +341,10 @@ document
 
     });
 
+
+/* ==========================================
+   BACKGROUND MUSIC
+========================================== */
 
 function setupMusic() {
             const music = document.getElementById('backgroundMusic');
