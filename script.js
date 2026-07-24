@@ -225,7 +225,7 @@ if (text.includes("coding") || text.includes("mulai kapan")) {
     }
 
     if (text.includes("jurusan")) {
-        jawaban.push(` Saya jurusan ${profile.jurusan}.`);
+        jawaban.push(`jurusan ${profile.jurusan}.`);
     }
 
     if (
