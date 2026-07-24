@@ -588,7 +588,7 @@
       .ag { grid-template-columns:1fr; gap:3rem; }
       .pf { max-width:260px; }
       .pc-ft { grid-column:1; grid-template-columns:1fr; }
-      .cpre { display:none; }
+      .cpre { display:block; }
     }
     @media (max-width:640px) {
       .nl { display:none; }
