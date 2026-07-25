@@ -126,16 +126,16 @@ document.querySelectorAll('.pc').forEach(c => {
 const profile = {
     nama: "Satriya Arif Wibowo",
     umur: "17 Tahun",
-    sekolah: "SMK Sejahtera Surabaya",
+    sekolah: "SMK Sejahtera Surabaya sebagai siswa kelas XI jurusan TJKT",
     jurusan: "TJKT ( Teknik Jaringan Komputer dan Telekomunikasi )",
     kelas: "XI TJKT",
     lokasi: "bumi",
     email: "anjaidimasmabarselebew@gmail.com",
     whatsapp: "nono privasi",
     coding: "dari situ saya tertarik dan masih suka ngoding sampe sekarang",
-
+    penutup: "iya Terima kasih telah mengunjungi portofolio saya. Jika Anda memiliki pertanyaan atau ingin bekerja sama, jangan ragu untuk menghubungi saya melalui email atau media sosial yang tercantum di atas. Saya selalu terbuka untuk peluang baru dan kolaborasi yang menarik.",
     role: "Full Stack Developer",
-
+    developer: "",
     skill: [
         "HTML",
         "CSS",
@@ -205,15 +205,15 @@ function getAnswer(text) {
         jawaban.push(`Nama saya <b>${profile.nama}</b>.`);
     }
 
-if (text.includes("coding") || text.includes("mulai kapan")) {
+if (text.includes("coding") || text.includes("mulai kapan") || text.includes("ngoding")) {
         jawaban.push(`saya memulai coding dari tahun 2025 itu karena saya
-           penasaran sama disuruh ayah untuk belajar codingan buat bekal masa depan sama saya belajar dari dea afrizal... codingan awal aku membuat cuman ya gitu foto 
+           penasaran sama disuruh ayah untuk belajar codingan buat bekal masa depan sama saya belajar dari dea afrizal... project awal aku membuat cuman ya gitu foto 
            saya pencet nanti bisa berpindah ke youtube ataupun ke sosmed ${profile.coding}.`);
     }
 
 
     if (text.includes("umur") || text.includes("usia")) {
-        jawaban.push(` Umur aku ${profile.umur}.`);
+        jawaban.push(` Umur aku masih ${profile.umur}.`);
     }
 
     if (text.includes("sekolah")) {
@@ -226,6 +226,10 @@ if (text.includes("coding") || text.includes("mulai kapan")) {
 
     if (text.includes("jurusan")) {
         jawaban.push(`jurusan ${profile.jurusan}.`);
+    }
+
+if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemilik") || text.includes("dibuat oleh") || text.includes("dibuat sama siapa") || text.includes("siapa yang membuat")) {
+        jawaban.push(`satriya arif wibowo dia membuatnya seorang diri.. sekarang si pemilik ingin membuat project baru  <b>${profile.developer}</b>.`);
     }
 
     if (
@@ -251,6 +255,11 @@ if (text.includes("coding") || text.includes("mulai kapan")) {
     }
 
 
+    
+ if (text.includes("oke") || text.includes("iya") || text.includes("makasih") || text.includes("terima kasih")) {
+        jawaban.push(` ${profile.penutup}`);
+    }
+
     if (
         text.includes("project") ||
         text.includes("portfolio") ||
@@ -270,7 +279,7 @@ if (text.includes("coding") || text.includes("mulai kapan")) {
 
     if (text.includes("github")) {
         jawaban.push(
-            ` Github saya:<br><a href="${profile.github}" target="_blank">${profile.github}</a>`
+            ` Github :<br><a href="${profile.github}" target="_blank">${profile.github}</a>`
         );
     }
 
