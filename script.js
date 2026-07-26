@@ -131,11 +131,19 @@ const profile = {
     kelas: "XI TJKT",
     lokasi: "bumi",
     email: "anjaidimasmabarselebew@gmail.com",
-    whatsapp: "nono privasi",
+    whatsapp: "",
     coding: "dari situ saya tertarik dan masih suka ngoding sampe sekarang",
-    penutup: "iya Terima kasih telah mengunjungi portofolio saya. Jika Anda memiliki pertanyaan atau ingin bekerja sama, jangan ragu untuk menghubungi saya melalui email atau media sosial yang tercantum di atas. Saya selalu terbuka untuk peluang baru dan kolaborasi yang menarik.",
+    penutup: "iya Terima kasih telah mengunjungi portofolio saya. Jika Anda memiliki pertanyaan atau masukan bikin codingan apalagi jangan ragu untuk menghubungi saya melalui email atau media sosial yang tercantum di atas. Saya selalu terbuka untuk peluang baru .",
     role: "Full Stack Developer",
+    smp: "",
+    makasih: "iyaa",
+    salam: "",
+    sulit: "",
+    ucapan: "",
+    kabar: "",
+    membuat: "",
     developer: "",
+   lulus: "",
     skill: [
         "HTML",
         "CSS",
@@ -151,7 +159,10 @@ const profile = {
     project: [
         "Portfolio Website",
         "Album keluarga",
-        "Shoot Love"
+        "Shoot Love",
+        "handmarker",
+        "ucapan valentine",
+        "laporan sekolah tetapi masih di tahap pengembangan",
     ],
 
     hobi: [
@@ -207,7 +218,8 @@ function getAnswer(text) {
 
 if (text.includes("coding") || text.includes("mulai kapan") || text.includes("ngoding")) {
         jawaban.push(`saya memulai coding dari tahun 2025 itu karena saya
-           penasaran sama disuruh ayah untuk belajar codingan buat bekal masa depan sama saya belajar dari dea afrizal... project awal aku membuat cuman ya gitu foto 
+           penasaran sama disuruh ayah untuk belajar codingan buat bekal masa depan sama saya belajar dari dea afrizal... 
+           project awal aku membuat cuman ya gitu foto 
            saya pencet nanti bisa berpindah ke youtube ataupun ke sosmed ${profile.coding}.`);
     }
 
@@ -216,16 +228,39 @@ if (text.includes("coding") || text.includes("mulai kapan") || text.includes("ng
         jawaban.push(` Umur aku masih ${profile.umur}.`);
     }
 
-    if (text.includes("sekolah")) {
+    if (text.includes("kabar") || text.includes("sehat")) {
+        jawaban.push(`masih sehat dan menjalani aktivitas seperti biasannya, ngoding, baca buku,  dengerin musik ${profile.kabar}.`);
+    }
+
+    if (text.includes("sekolah") || text.includes("pendidikan") || text.includes("pelajar") || text.includes("siswa")) {
         jawaban.push(`  bersekolah di <b>${profile.sekolah}</b>.`);
     }
+
+     if (text.includes("setelah lulus") || text.includes("kuliah") || text.includes("lanjut kuliah") || text.includes("lanjut sekolah") || text.includes("lanjut pendidikan")) {
+        jawaban.push(` mau kuliah di  ITS sebagai mahasiswa IT <b>${profile.lulus}</b>.`);
+    }
+
+ if (text.includes("kedepannya") || text.includes("mengembangkan") || text.includes("selanjutnya") || text.includes("dikembangkan") || text.includes("planning") || text.includes("besok")) {
+        jawaban.push(`  pengen buat website besar besaran.. tapi saat ini masih mempelajari yang belum aku ketahui  <b>${profile.membuat}</b>.`);
+    }
+
 
     if (text.includes("kelas")) {
         jawaban.push(` kelas ${profile.kelas}.`);
     }
 
-    if (text.includes("jurusan")) {
+    if (text.includes("jurusan") || text. includes("tjkt")) {
         jawaban.push(`jurusan ${profile.jurusan}.`);
+    }
+
+if (text.includes("dulu") || text.includes("smp")) {
+        jawaban.push(`iya saya dulu smp sempat ada yang bilang kalo aku adalah seorang bodoh.
+             apalagi aku pas smp suka bolos terus tugas gapernah dikerjakan. setip ada tugas pasti nyontek ke temen. 
+             terus saat kerja kelompok ketika temen udah dapet kelompok. aku ngerasa kaya gapernah dipilih sama temen temen 
+             itu kalo aku semisal gaada besfriend.. terus ada yang pernah bully aku. saat smp sampe dipukul juga pernah. 
+             terus aku  inget sama prinsip orang 'kalo semisal kamu di hina atau dibully jadikan hinaan itu sebagai 
+             motivasi agar saat kamu capek atau ngerasa pengen putus asa itu bisa membuat kamu pengen bener bener
+              membuktikan' <b>${profile.smp}</b>.`);
     }
 
 if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemilik") || text.includes("dibuat oleh") || text.includes("dibuat sama siapa") || text.includes("siapa yang membuat")) {
@@ -250,15 +285,29 @@ if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemi
         );
     }
 
- if (text.includes("nomor") || text.includes("wa") || text.includes("whatsapp")) {
-        jawaban.push(` hayo kepo wkwkwk... ${profile.whatsapp}`);
-    }
+ if (text.includes("nomor") || text.includes("whatsapp")) {
+    jawaban.push(`
+        <a href="https://wa.me/6282234668302" target="_blank">
+            jika ada pertanyaan atau masukan bisa hubungi disini https://wa.me/6282234668302
+        </a>
+        <br>${profile.whatsapp}
+    `);
+}
 
 
     
- if (text.includes("oke") || text.includes("iya") || text.includes("makasih") || text.includes("terima kasih")) {
+ if (text.includes("yaudah") || text.includes("iyaa") || text.includes("makasih") || text.includes("terima kasih")) {
         jawaban.push(` ${profile.penutup}`);
     }
+
+    if (text.includes("oke") || text.includes("oala") || text.includes("gitu") || text.includes("ok")) {
+        jawaban.push(` ${profile.makasih}`);
+    }
+
+    if (text.includes(" belajar selama kamu sulit") || text.includes("apakah belajar kaya gini") || text.includes("selama kamu belajar")) {
+        jawaban.push(` semua tergantung diri sendiri dan seberapa kamu konsistennya  ${profile.sulit}`);
+    }
+
 
     if (
         text.includes("project") ||
@@ -276,7 +325,6 @@ if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemi
             " Hobi saya:<br><br>• " + profile.hobi.join("<br>• ")
         );
     }
-
     if (text.includes("github")) {
         jawaban.push(
             ` Github :<br><a href="${profile.github}" target="_blank">${profile.github}</a>`
@@ -287,6 +335,10 @@ if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemi
         jawaban.push(`  jangan lupa difollow ya jangan di stalk doang ${profile.instagram}`);
     }
 
+    if (text.includes("bagus") || text.includes("keren") || text.includes("mantap") || text.includes("wow") || text.includes("masyaallah") || text.includes("hebat") || text.includes("sangat bagus") || text.includes("sangat keren") || text.includes("sangat mantap") || text.includes("sangat wow") || text.includes("sangat luar biasa") || text.includes("sangat hebat")) {
+        jawaban.push(`  alhamdulillah semua kalo ga diiringi dengan doa  bakalan sulit.. btw makasih yaa semoga kamu juga bisa gaada yang mustahil di dunia ini ${profile.ucapan}`);
+    }
+
 
     if (text.includes("email")) {
         jawaban.push(` Email saya ${profile.email}`);
@@ -295,13 +347,26 @@ if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemi
     if (
         text.includes("halo") ||
         text.includes("hai") ||
-        text.includes("hi")
+        text.includes("hi") ||
+        text.includes("selamat pagi") ||
+        text.includes("selamat siang") ||
+        text.includes("selamat sore") ||
+        text.includes("selamat malam")
     ) {
         jawaban.push("Halo Ada yang ingin kamu ketahui tentang saya?");
     }
 
+    if (
+        text.includes("assalammualaikum") ||
+        text.includes("assalamualaikum") ||
+        text.includes("assalamualaikum warahmatullahi wabarakatuh") ||
+        text.includes("assalamualaikum wr wb")
+    ) {  jawaban.push(`waalaikumsalam ${profile.salam}`);
+       
+    }
+
     if (jawaban.length === 0) {
-        return "Maaf, saya belum mempunyai informasi mengenai pertanyaan tersebut. Coba tanyakan tentang nama, sekolah, skill, project, Github, hobi.";
+        return "Maaf, saya belum mempunyai informasi mengenai pertanyaan tersebut. Coba tanyakan tentang yang lain.";
     }
 
     return jawaban.join("<br><br>");
