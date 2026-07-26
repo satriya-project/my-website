@@ -119,6 +119,32 @@ document.querySelectorAll('.pc').forEach(c => {
   c.addEventListener('mouseleave', () => c.style.transform='');
 });
 
+
+/* coba baru*/
+function reveal(){
+
+    const reveals=document.querySelectorAll(".reveal");
+
+    reveals.forEach(item=>{
+
+        const top=item.getBoundingClientRect().top;
+
+        if(top<window.innerHeight-100){
+
+            item.classList.add("active");
+
+        }
+
+    });
+}
+
+window.addEventListener("scroll",reveal);
+
+reveal();
+
+
+
+
 /* ==========================================
    AI CHAT (GRATIS TANPA API)
 ========================================== */
