@@ -142,6 +142,7 @@ const profile = {
     ucapan: "",
     kabar: "",
     membuat: "",
+    pacar: "",
     developer: "",
    lulus: "",
     skill: [
@@ -334,6 +335,11 @@ if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemi
    if (text.includes("instagram") || text.includes("ig")) {
         jawaban.push(`  jangan lupa difollow ya jangan di stalk doang ${profile.instagram}`);
     }
+
+ if (text.includes("punya") || text.includes("pacar") || text.includes("justfriend") || text.includes("jomblo") || text.includes("single")) {
+        jawaban.push(`aku masih single gais blm punya pacar, belakangan aja deh hahaha padalan dalam hati "when ya" ${profile.pacar}`);
+    }
+
 
     if (text.includes("bagus") || text.includes("keren") || text.includes("mantap") || text.includes("wow") || text.includes("masyaallah") || text.includes("hebat") || text.includes("sangat bagus") || text.includes("sangat keren") || text.includes("sangat mantap") || text.includes("sangat wow") || text.includes("sangat luar biasa") || text.includes("sangat hebat")) {
         jawaban.push(`  alhamdulillah semua kalo ga diiringi dengan doa  bakalan sulit.. btw makasih yaa semoga kamu juga bisa gaada yang mustahil di dunia ini ${profile.ucapan}`);
