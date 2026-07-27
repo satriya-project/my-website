@@ -69,11 +69,11 @@
        NAV
     ───────────────────────────────────── */
     #nav {
-      position: fixed;
+      position: absolute;
       top:0; left:0; right:0;
       z-index: 500;
       padding: 24px 6%;
-      display: flex;
+      display: none;
       justify-content: space-between;
       align-items: center;
       transition: padding .3s, background .3s, backdrop-filter .3s, border-color .3s;
@@ -93,7 +93,7 @@
       color: var(--pri);
     }
     .logo em { color: var(--sec); font-style: normal; }
-    .nl { list-style: none; display: flex; gap: 2.5rem; }
+    .nl { list-style:none; display: flex; gap: 2.5rem; }
     .nl a {
       font-family: var(--fm);
       font-size: .82rem;
@@ -591,7 +591,7 @@
       .cpre { display:block; }
     }
     @media (max-width:640px) {
-      .nl { display:none; }
+      .nl { display:block; }
       .pg { grid-template-columns:1fr; }
       .wrap { padding:6rem 5%; }
     }
