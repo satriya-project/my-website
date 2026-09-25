@@ -1,583 +1,2705 @@
+(() => {
+    "use strict";
 
-/* ═══════════════════════════════════════
-   CURSOR
-═══════════════════════════════════════ */
-const cEl = document.getElementById('cur');
-const cRel = document.getElementById('cur-r');
-let mx=0, my=0, rx=0, ry=0;
-const mobile = 'ontouchstart' in window || window.innerWidth < 768;
+    /* =========================================================
+       PORTFOLIO SCRIPT
+       Mencegah script berjalan 2x jika script.js terpanggil ganda
+    ========================================================= */
 
-if (mobile) {
-  cEl.style.display = 'none';
-  cRel.style.display = 'none';
-  document.body.classList.add('touch-dev');
-} else {
-  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cEl.style.left=mx+'px'; cEl.style.top=my+'px'; });
-  document.querySelectorAll('a,button,.pc,.sk,.sg').forEach(el => {
-    el.addEventListener('mouseenter', () => { cEl.classList.add('big'); cRel.classList.add('big'); });
-    el.addEventListener('mouseleave', () => { cEl.classList.remove('big'); cRel.classList.remove('big'); });
-  });
-  (function lag() {
-    rx += (mx-rx)*0.11; ry += (my-ry)*0.11;
-    cRel.style.left=rx+'px'; cRel.style.top=ry+'px';
-    requestAnimationFrame(lag);
-  })();
-}
+    if (window.__portfolioScriptLoaded) return;
 
-/* ═══════════════════════════════════════
-   PARTICLE CANVAS
-═══════════════════════════════════════ */
-const cnv = document.getElementById('cnv');
-const ctx = cnv.getContext('2d');
-let W, H, pts=[];
-
-function resize() { W=cnv.width=cnv.offsetWidth; H=cnv.height=cnv.offsetHeight; }
-window.addEventListener('resize', resize);
-resize();
-
-function Pt() {
-  this.reset = function() {
-    this.x = Math.random()*W; this.y = Math.random()*H;
-    this.vx = (Math.random()-.5)*.55; this.vy = (Math.random()-.5)*.55;
-    this.r = Math.random()*1.4+.5; this.a = Math.random()*.5+.1;
-  };
-  this.reset();
-  this.step = function() {
-    this.x+=this.vx; this.y+=this.vy;
-    const dx=mx-this.x, dy=my-this.y, d=Math.hypot(dx,dy);
-    if (d<140) { this.x+=dx*.02; this.y+=dy*.02; }
-    if (this.x<0) this.x=W; if (this.x>W) this.x=0;
-    if (this.y<0) this.y=H; if (this.y>H) this.y=0;
-  };
-  this.draw = function() {
-    ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(99,102,241,${this.a})`; ctx.fill();
-  };
-}
-for (let i=0;i<100;i++) { const p=new Pt(); pts.push(p); }
-
-(function tick() {
-  ctx.clearRect(0,0,W,H);
-  for (let i=0;i<pts.length;i++) {
-    pts[i].step(); pts[i].draw();
-    for (let j=i+1;j<pts.length;j++) {
-      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.hypot(dx,dy);
-      if (d<130) {
-        ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
-        ctx.strokeStyle=`rgba(99,102,241,${.12*(1-d/130)})`; ctx.lineWidth=.5; ctx.stroke();
-      }
-    }
-  }
-  requestAnimationFrame(tick);
-})();
-
-/* ═══════════════════════════════════════
-   TYPEWRITER
-═══════════════════════════════════════ */
-const ROLES = [
-  'Full Stack Developer ',
-  'software enggineering ',
-  'developer website ',
-];
-let ri=0, ci=0, fwd=true;
-const typEl = document.getElementById('typed');
-
-(function tw() {
-  const w = ROLES[ri];
-  typEl.textContent = fwd ? w.slice(0,++ci) : w.slice(0,--ci);
-  if (fwd && ci===w.length) { fwd=false; setTimeout(tw,1900); return; }
-  if (!fwd && ci===0) { fwd=true; ri=(ri+1)%ROLES.length; }
-  setTimeout(tw, fwd?82:34);
-})();
-
-/* ═══════════════════════════════════════
-   NAV SCROLL
-═══════════════════════════════════════ */
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => nav.classList.toggle('stuck', window.scrollY>50));
-
-/* ═══════════════════════════════════════
-   SCROLL REVEAL
-═══════════════════════════════════════ */
-document.querySelectorAll('.rv').forEach(el => {
-  new IntersectionObserver(es => {
-    if (es[0].isIntersecting) es[0].target.classList.add('vis');
-  }, { threshold:.12 }).observe(el);
-});
-
-/* ═══════════════════════════════════════
-   3D CARD TILT
-═══════════════════════════════════════ */
-document.querySelectorAll('.pc').forEach(c => {
-  c.style.transition = 'border-color .3s, box-shadow .3s, transform .3s';
-  c.addEventListener('mousemove', e => {
-    const r=c.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-.5;
-    const y=(e.clientY-r.top)/r.height-.5;
-    c.style.transform = `translateY(-6px) rotateX(${-y*8}deg) rotateY(${x*8}deg)`;
-  });
-  c.addEventListener('mouseleave', () => c.style.transform='');
-});
+    window.__portfolioScriptLoaded = true;
 
 
-/* coba baru*/
-function reveal(){
+    /* =========================================================
+       CURSOR
+    ========================================================= */
 
-    const reveals=document.querySelectorAll(".reveal");
+    const cEl =
+        document.getElementById("cur");
 
-    reveals.forEach(item=>{
+    const cRel =
+        document.getElementById("cur-r");
 
-        const top=item.getBoundingClientRect().top;
 
-        if(top<window.innerHeight-100){
+    let mx = 0;
+    let my = 0;
+    let rx = 0;
+    let ry = 0;
 
-            item.classList.add("active");
 
+    const touchDevice =
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.innerWidth < 768;
+
+
+    if (touchDevice) {
+
+        if (cEl) {
+            cEl.style.display = "none";
         }
 
-    });
-}
-
-window.addEventListener("scroll",reveal);
-
-reveal();
-
-
-
-
-/* ==========================================
-   AI CHAT 
-========================================== */
-
-const profile = {
-    nama: "Satriya Arif Wibowo",
-    umur: "17 Tahun",
-    sekolah: "SMK Sejahtera Surabaya sebagai siswa kelas XI jurusan TJKT",
-    jurusan: "TJKT ( Teknik Jaringan Komputer dan Telekomunikasi )",
-    kelas: "XI TJKT",
-    lokasi: "bumi",
-    email: "anjaidimasmabarselebew@gmail.com",
-    whatsapp: "",
-    coding: "dari situ saya tertarik dan masih suka ngoding sampe sekarang",
-    penutup: "iya Terima kasih telah mengunjungi portofolio saya. Jika Anda memiliki pertanyaan atau masukan bikin codingan apalagi jangan ragu untuk menghubungi saya melalui email atau media sosial yang tercantum di atas. Saya selalu terbuka untuk peluang baru .",
-    role: "Full Stack Developer",
-    smp: "",
-    makasih: "iyaa",
-    salam: "",
-    sulit: "",
-    ucapan: "",
-    kabar: "",
-    membuat: "",
-    pacar: "",
-    developer: "",
-   lulus: "",
-    skill: [
-        "HTML",
-        "CSS",
-        "JavaScript",
-        "React",
-        "Node.js",
-        "Python",
-        "MySQL",
-        "Git",
-        "Tailwind CSS"
-    ],
-
-    project: [
-        "Portfolio Website",
-        "Album keluarga",
-        "Shoot Love",
-        "handmarker",
-        "ucapan valentine",
-        "laporan sekolah tetapi masih di tahap pengembangan",
-    ],
-
-    hobi: [
-        "Coding",
-        "Gaming",
-        "jalan jalan",
-        "dengerin musik"
-    ],
-
-    github: "https://github.com/satriya-project",
-    instagram: "@exologyoo",
-    email: "anjaidimasmabarselebew@gmail.com"
-};
-
-function addMsg(role, html) {
-    const box = document.getElementById("cm");
-
-    const d = document.createElement("div");
-
-    d.className = "msg" + (role === "u" ? " u" : "");
-
-    d.innerHTML = `
-        <div class="av av-${role}">${role === "u" ? "U" : "AI"}</div>
-        <div class="bub">${html}</div>
-    `;
-
-    box.appendChild(d);
-    box.scrollTop = box.scrollHeight;
-
-    return d;
-}
-
-function typing() {
-    return addMsg(
-        "ai",
-        `<div class="dots">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>`
-    );
-}
-
-function getAnswer(text) {
-
-    text = text.toLowerCase();
-
-    let jawaban = [];
-
-    if (text.includes("nama") || text.includes("siapa kamu")) {
-        jawaban.push(`Nama saya <b>${profile.nama}</b>.`);
-    }
-
-if (text.includes("coding") || text.includes("mulai kapan") || text.includes("ngoding")) {
-        jawaban.push(`saya memulai coding dari tahun 2025 itu karena saya
-           penasaran sama disuruh ayah untuk belajar codingan buat bekal masa depan sama saya belajar dari dea afrizal... 
-           project awal aku membuat cuman ya gitu foto 
-           saya pencet nanti bisa berpindah ke youtube ataupun ke sosmed ${profile.coding}.`);
-    }
-
-
-    if (text.includes("umur") || text.includes("usia")) {
-        jawaban.push(` Umur aku masih ${profile.umur}.`);
-    }
-
-    if (text.includes("kabar") || text.includes("sehat")) {
-        jawaban.push(`masih sehat dan menjalani aktivitas seperti biasannya, ngoding, baca buku,  dengerin musik ${profile.kabar}.`);
-    }
-
-    if (text.includes("sekolah") || text.includes("pendidikan") || text.includes("pelajar") || text.includes("siswa")) {
-        jawaban.push(`  bersekolah di <b>${profile.sekolah}</b>.`);
-    }
-
-     if (text.includes("setelah lulus") || text.includes("kuliah") || text.includes("lanjut kuliah") || text.includes("lanjut sekolah") || text.includes("lanjut pendidikan")) {
-        jawaban.push(` mau kuliah di  ITS sebagai mahasiswa IT <b>${profile.lulus}</b>.`);
-    }
-
- if (text.includes("kedepannya") || text.includes("mengembangkan") || text.includes("selanjutnya") || text.includes("dikembangkan") || text.includes("planning") || text.includes("besok")) {
-        jawaban.push(`  pengen buat website besar besaran.. tapi saat ini masih mempelajari yang belum aku ketahui  <b>${profile.membuat}</b>.`);
-    }
-
-
-    if (text.includes("kelas")) {
-        jawaban.push(` kelas ${profile.kelas}.`);
-    }
-
-    if (text.includes("jurusan") || text. includes("tjkt")) {
-        jawaban.push(`jurusan ${profile.jurusan}.`);
-    }
-
-if (text.includes("dulu") || text.includes("smp")) {
-        jawaban.push(`iya saya dulu smp sempat ada yang bilang kalo aku adalah seorang bodoh.
-             apalagi aku pas smp suka bolos terus tugas gapernah dikerjakan. setip ada tugas pasti nyontek ke temen. 
-             terus saat kerja kelompok ketika temen udah dapet kelompok. aku ngerasa kaya gapernah dipilih sama temen temen 
-             itu kalo aku semisal gaada besfriend.. terus ada yang pernah bully aku. saat smp sampe dipukul juga pernah. 
-             terus aku  inget sama prinsip orang 'kalo semisal kamu di hina atau dibully jadikan hinaan itu sebagai 
-             motivasi agar saat kamu capek atau ngerasa pengen putus asa itu bisa membuat kamu pengen bener bener
-              membuktikan' <b>${profile.smp}</b>.`);
-    }
-
-if (text.includes("pembuat") || text.includes("pencipta") || text.includes("pemilik") || text.includes("dibuat oleh") || text.includes("dibuat sama siapa") || text.includes("siapa yang membuat")) {
-        jawaban.push(`satriya arif wibowo dia membuatnya seorang diri.. sekarang si pemilik ingin membuat project baru  <b>${profile.developer}</b>.`);
-    }
-
-    if (
-        text.includes("tinggal") ||
-        text.includes("lokasi") ||
-        text.includes("asal")
-    ) {
-        jawaban.push(` berasal dari ${profile.lokasi}.`);
-    }
-
-    if (
-        text.includes("skill") ||
-        text.includes("keahlian") ||
-        text.includes("bisa apa")
-    ) {
-        jawaban.push(
-            " Skill saya:<br><br>• " + profile.skill.join("<br>• ")
-        );
-    }
-
- if (text.includes("nomor") || text.includes("whatsapp")) {
-    jawaban.push(`
-        <a href="https://wa.me/6282234668302" target="_blank">
-            jika ada pertanyaan atau masukan bisa hubungi disini https://wa.me/6282234668302
-        </a>
-        <br>${profile.whatsapp}
-    `);
-}
-
-
-    
- if (text.includes("yaudah") || text.includes("iyaa") || text.includes("makasih") || text.includes("terima kasih")) {
-        jawaban.push(` ${profile.penutup}`);
-    }
-
-    if (text.includes("oke") || text.includes("oala") || text.includes("gitu") || text.includes("ok")) {
-        jawaban.push(` ${profile.makasih}`);
-    }
-
-    if (text.includes(" belajar selama kamu sulit") || text.includes("apakah belajar kaya gini") || text.includes("selama kamu belajar")) {
-        jawaban.push(` semua tergantung diri sendiri dan seberapa kamu konsistennya  ${profile.sulit}`);
-    }
-
-
-    if (
-        text.includes("project") ||
-        text.includes("portfolio") ||
-        text.includes("karya")
-    ) {
-        jawaban.push(
-            " Project yang pernah saya buat:<br><br>• " +
-            profile.project.join("<br>• ")
-        );
-    }
-
-    if (text.includes("hobi")) {
-        jawaban.push(
-            " Hobi saya:<br><br>• " + profile.hobi.join("<br>• ")
-        );
-    }
-    if (text.includes("github")) {
-        jawaban.push(
-            ` Github :<br><a href="${profile.github}" target="_blank">${profile.github}</a>`
-        );
-    }
-
-   if (text.includes("instagram") || text.includes("ig")) {
-        jawaban.push(`  jangan lupa difollow ya jangan di stalk doang ${profile.instagram}`);
-    }
-
- if (text.includes("punya") || text.includes("pacar") || text.includes("justfriend") || text.includes("jomblo") || text.includes("single")) {
-        jawaban.push(`aku masih single gais blm punya pacar, belakangan aja deh hahaha padalan dalam hati "when ya" ${profile.pacar}`);
-    }
-
-
-    if (text.includes("bagus") || text.includes("keren") || text.includes("mantap") || text.includes("wow") || text.includes("masyaallah") || text.includes("hebat") || text.includes("sangat bagus") || text.includes("sangat keren") || text.includes("sangat mantap") || text.includes("sangat wow") || text.includes("sangat luar biasa") || text.includes("sangat hebat")) {
-        jawaban.push(`  alhamdulillah semua kalo ga diiringi dengan doa  bakalan sulit.. btw makasih yaa semoga kamu juga bisa gaada yang mustahil di dunia ini ${profile.ucapan}`);
-    }
-
-
-    if (text.includes("email")) {
-        jawaban.push(` Email saya ${profile.email}`);
-    }
-
-    if (
-        text.includes("halo") ||
-        text.includes("hai") ||
-        text.includes("hi") ||
-        text.includes("selamat pagi") ||
-        text.includes("selamat siang") ||
-        text.includes("selamat sore") ||
-        text.includes("selamat malam")
-    ) {
-        jawaban.push("Halo Ada yang ingin kamu ketahui tentang saya?");
-    }
-
-    if (
-        text.includes("assalammualaikum") ||
-        text.includes("assalamualaikum") ||
-        text.includes("assalamualaikum warahmatullahi wabarakatuh") ||
-        text.includes("assalamualaikum wr wb")
-    ) {  jawaban.push(`waalaikumsalam ${profile.salam}`);
-       
-    }
-
-    if (jawaban.length === 0) {
-        return "Maaf, saya belum mempunyai informasi mengenai pertanyaan tersebut. Coba tanyakan tentang yang lain.";
-    }
-
-    return jawaban.join("<br><br>");
-}
-
-function send() {
-
-    const input = document.getElementById("ci");
-
-    const txt = input.value.trim();
-
-    if (!txt) return;
-
-    input.value = "";
-
-    document.getElementById("sgg").style.display = "none";
-
-    addMsg("u", txt);
-
-    const bubble = typing();
-
-    setTimeout(() => {
-
-        bubble.remove();
-
-        addMsg("ai", getAnswer(txt));
-
-    }, 700);
-
-}
-
-function qsend(btn) {
-    document.getElementById("ci").value = btn.textContent;
-    send();
-}
-
-document
-    .getElementById("ci")
-    .addEventListener("keypress", function (e) {
-
-        if (e.key === "Enter") {
-
-            send();
-
+        if (cRel) {
+            cRel.style.display = "none";
         }
 
-    });
+        if (document.body) {
+            document.body.classList.add(
+                "touch-dev"
+            );
+        }
+
+    } else {
+
+        document.addEventListener(
+            "mousemove",
+            (e) => {
+
+                mx = e.clientX;
+                my = e.clientY;
 
 
-/* ==========================================
-   BACKGROUND MUSIC
-========================================== */
+                if (cEl) {
 
-function setupMusic() {
-            const music = document.getElementById('backgroundMusic');
+                    cEl.style.left =
+                        `${mx}px`;
 
-            const isMusicPlaying = localStorage.getItem('musicPlaying') === 'true';
-            const musicCurrentTime = localStorage.getItem('musicCurrentTime') || 0;
+                    cEl.style.top =
+                        `${my}px`;
 
-            if (isMusicPlaying) {
-                music.currentTime = parseFloat(musicCurrentTime);
+                }
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(
+                "a, button, .pc, .cert-card, .sk, .sg"
+            )
+            .forEach((el) => {
+
+                el.addEventListener(
+                    "mouseenter",
+                    () => {
+
+                        if (cEl) {
+                            cEl.classList.add(
+                                "big"
+                            );
+                        }
+
+                        if (cRel) {
+                            cRel.classList.add(
+                                "big"
+                            );
+                        }
+
+                    }
+                );
+
+
+                el.addEventListener(
+                    "mouseleave",
+                    () => {
+
+                        if (cEl) {
+                            cEl.classList.remove(
+                                "big"
+                            );
+                        }
+
+                        if (cRel) {
+                            cRel.classList.remove(
+                                "big"
+                            );
+                        }
+
+                    }
+                );
+
+            });
+
+
+        function animateCursorRing() {
+
+            rx +=
+                (mx - rx) * 0.11;
+
+            ry +=
+                (my - ry) * 0.11;
+
+
+            if (cRel) {
+
+                cRel.style.left =
+                    `${rx}px`;
+
+                cRel.style.top =
+                    `${ry}px`;
+
             }
 
-            music.addEventListener('play', () => {
-                localStorage.setItem('musicPlaying', 'true');
-            });
 
-            music.addEventListener('pause', () => {
-                localStorage.setItem('musicPlaying', 'false');
-            });
+            requestAnimationFrame(
+                animateCursorRing
+            );
 
-            setInterval(() => {
-                localStorage.setItem('musicCurrentTime', music.currentTime);
-            }, 1000);
-
-            document.addEventListener('click', function startMusic() {
-                music.play().catch(error => {
-                    console.log('Autoplay prevented', error);
-                });
-                document.removeEventListener('click', startMusic);
-            });
         }
 
-        document.addEventListener('DOMContentLoaded', setupMusic);
 
-        
-function continueMusic() {
-    const music = document.getElementById("backgroundMusic");
+        animateCursorRing();
 
-    if (!music) return;
-
-    const isMusicPlaying =
-        localStorage.getItem("musicPlaying") === "true";
-
-    const musicCurrentTime =
-        localStorage.getItem("musicCurrentTime") || 0;
-
-    if (isMusicPlaying) {
-        music.currentTime = parseFloat(musicCurrentTime);
-
-        music.play().catch((error) => {
-            console.log("Music playback failed", error);
-        });
     }
 
-    document.addEventListener(
-        "touchstart",
-        startMusic,
-        { once: true }
-    );
 
-    document.addEventListener(
-        "click",
-        startMusic,
-        { once: true }
-    );
+    /* =========================================================
+       PARTICLE CANVAS
+    ========================================================= */
 
-    function startMusic() {
-        music.play().catch((error) => {
-            console.log("Autoplay prevented", error);
-        });
+    const cnv =
+        document.getElementById("cnv");
+
+    const ctx =
+        cnv
+            ? cnv.getContext("2d")
+            : null;
+
+
+    let canvasWidth = 0;
+    let canvasHeight = 0;
+
+    const particles = [];
+
+
+    function resizeCanvas() {
+
+        if (!cnv) return;
+
+
+        canvasWidth =
+            cnv.width =
+                cnv.offsetWidth;
+
+
+        canvasHeight =
+            cnv.height =
+                cnv.offsetHeight;
+
     }
 
-    music.addEventListener("timeupdate", () => {
-        localStorage.setItem(
-            "musicCurrentTime",
-            music.currentTime
+
+    function Particle() {
+
+        this.reset =
+            function () {
+
+                this.x =
+                    Math.random() *
+                    canvasWidth;
+
+
+                this.y =
+                    Math.random() *
+                    canvasHeight;
+
+
+                this.vx =
+                    (Math.random() - 0.5) *
+                    0.55;
+
+
+                this.vy =
+                    (Math.random() - 0.5) *
+                    0.55;
+
+
+                this.r =
+                    Math.random() *
+                    1.4 +
+                    0.5;
+
+
+                this.a =
+                    Math.random() *
+                    0.5 +
+                    0.1;
+
+            };
+
+
+        this.reset();
+
+
+        this.step =
+            function () {
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+
+                const dx =
+                    mx - this.x;
+
+
+                const dy =
+                    my - this.y;
+
+
+                const d =
+                    Math.hypot(
+                        dx,
+                        dy
+                    );
+
+
+                if (
+                    d < 140 &&
+                    !touchDevice
+                ) {
+
+                    this.x +=
+                        dx * 0.02;
+
+
+                    this.y +=
+                        dy * 0.02;
+
+                }
+
+
+                if (
+                    this.x < 0
+                ) {
+
+                    this.x =
+                        canvasWidth;
+
+                }
+
+
+                if (
+                    this.x >
+                    canvasWidth
+                ) {
+
+                    this.x = 0;
+
+                }
+
+
+                if (
+                    this.y < 0
+                ) {
+
+                    this.y =
+                        canvasHeight;
+
+                }
+
+
+                if (
+                    this.y >
+                    canvasHeight
+                ) {
+
+                    this.y = 0;
+
+                }
+
+            };
+
+
+        this.draw =
+            function () {
+
+                if (!ctx) return;
+
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    this.x,
+                    this.y,
+                    this.r,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fillStyle =
+                    `rgba(99,102,241,${this.a})`;
+
+
+                ctx.fill();
+
+            };
+
+    }
+
+
+    if (
+        cnv &&
+        ctx
+    ) {
+
+        resizeCanvas();
+
+
+        window.addEventListener(
+            "resize",
+            resizeCanvas
         );
-    });
-
-    music.addEventListener("play", () => {
-        localStorage.setItem("musicPlaying", "true");
-    });
-
-    music.addEventListener("pause", () => {
-        localStorage.setItem("musicPlaying", "false");
-    });
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  init(); 
-  continueMusic();
-});
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    const music = document.getElementById("backgroundMusic");
+        for (
+            let i = 0;
+            i < 100;
+            i++
+        ) {
 
-    if (!music) return;
+            particles.push(
+                new Particle()
+            );
 
-    // ambil status dari halaman sebelumnya
-    const isPlaying = localStorage.getItem("musicPlaying") === "true";
-    const time = localStorage.getItem("musicTime") || 0;
+        }
 
-    music.currentTime = parseFloat(time);
 
-    if (isPlaying) {
-        music.play().catch(() => { });
+        function animateParticles() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvasWidth,
+                canvasHeight
+            );
+
+
+            for (
+                let i = 0;
+                i < particles.length;
+                i++
+            ) {
+
+                particles[i].step();
+                particles[i].draw();
+
+
+                for (
+                    let j = i + 1;
+                    j < particles.length;
+                    j++
+                ) {
+
+                    const dx =
+                        particles[i].x -
+                        particles[j].x;
+
+
+                    const dy =
+                        particles[i].y -
+                        particles[j].y;
+
+
+                    const d =
+                        Math.hypot(
+                            dx,
+                            dy
+                        );
+
+
+                    if (
+                        d < 130
+                    ) {
+
+                        ctx.beginPath();
+
+
+                        ctx.moveTo(
+                            particles[i].x,
+                            particles[i].y
+                        );
+
+
+                        ctx.lineTo(
+                            particles[j].x,
+                            particles[j].y
+                        );
+
+
+                        ctx.strokeStyle =
+                            `rgba(
+                                99,
+                                102,
+                                241,
+                                ${
+                                    0.12 *
+                                    (
+                                        1 -
+                                        d / 130
+                                    )
+                                }
+                            )`;
+
+
+                        ctx.lineWidth =
+                            0.5;
+
+
+                        ctx.stroke();
+
+                    }
+
+                }
+
+            }
+
+
+            requestAnimationFrame(
+                animateParticles
+            );
+
+        }
+
+
+        animateParticles();
+
     }
 
-    // simpan posisi terus
-    setInterval(() => {
-        localStorage.setItem("musicTime", music.currentTime);
-    }, 1000);
 
-    music.addEventListener("play", () => {
-        localStorage.setItem("musicPlaying", "true");
-    });
+    /* =========================================================
+       TYPEWRITER
+    ========================================================= */
 
-    music.addEventListener("pause", () => {
-        localStorage.setItem("musicPlaying", "false");
-    });
+    const ROLES = [
 
-    // INI KUNCI UTAMA (klik sekali saja di mana saja)
-    document.addEventListener("click", function startMusic() {
-        music.play().catch(() => { });
-        document.removeEventListener("click", startMusic);
-    });
-});
+        "Full Stack Developer ",
+
+        "software enggineering ",
+
+        "developer website "
+
+    ];
 
 
+    const typEl =
+        document.getElementById(
+            "typed"
+        );
 
+
+    if (typEl) {
+
+        let roleIndex = 0;
+        let charIndex = 0;
+        let forward = true;
+
+
+        function typeWriter() {
+
+            const word =
+                ROLES[roleIndex];
+
+
+            if (forward) {
+
+                charIndex++;
+
+            } else {
+
+                charIndex--;
+
+            }
+
+
+            typEl.textContent =
+                word.slice(
+                    0,
+                    charIndex
+                );
+
+
+            if (
+                forward &&
+                charIndex ===
+                word.length
+            ) {
+
+                forward =
+                    false;
+
+
+                setTimeout(
+                    typeWriter,
+                    1900
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                !forward &&
+                charIndex === 0
+            ) {
+
+                forward =
+                    true;
+
+
+                roleIndex =
+                    (
+                        roleIndex + 1
+                    ) %
+                    ROLES.length;
+
+            }
+
+
+            setTimeout(
+                typeWriter,
+                forward
+                    ? 82
+                    : 34
+            );
+
+        }
+
+
+        typeWriter();
+
+    }
+
+
+    /* =========================================================
+       NAVBAR
+    ========================================================= */
+
+    const nav =
+        document.getElementById(
+            "nav"
+        );
+
+
+    const navToggle =
+        document.getElementById(
+            "navToggle"
+        );
+
+
+    const navLinks =
+        document.querySelectorAll(
+            ".nav-link"
+        );
+
+
+    const sections =
+        document.querySelectorAll(
+            "section[id]"
+        );
+
+
+    const SIDE_START =
+        150;
+
+
+    /* =========================================================
+       BUKA NAVBAR
+    ========================================================= */
+
+    function openNav() {
+
+        if (!nav) return;
+
+
+        nav.classList.add(
+            "open"
+        );
+
+
+        if (navToggle) {
+
+            navToggle.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+
+            navToggle.setAttribute(
+                "aria-label",
+                "Tutup menu"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       TUTUP NAVBAR
+    ========================================================= */
+
+    function closeNav() {
+
+        if (!nav) return;
+
+
+        nav.classList.remove(
+            "open"
+        );
+
+
+        if (navToggle) {
+
+            navToggle.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+
+            navToggle.setAttribute(
+                "aria-label",
+                "Buka menu"
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       TOGGLE NAVBAR
+    ========================================================= */
+
+    function toggleNav() {
+
+        if (!nav) return;
+
+
+        if (
+            nav.classList.contains(
+                "open"
+            )
+        ) {
+
+            closeNav();
+
+        } else {
+
+            openNav();
+
+        }
+
+    }
+
+
+    /* =========================================================
+       TOMBOL NAVBAR
+    ========================================================= */
+
+    if (navToggle) {
+
+        navToggle.addEventListener(
+            "click",
+            (event) => {
+
+                event.stopPropagation();
+
+                toggleNav();
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       NAVBAR SCROLL
+    ========================================================= */
+
+    let previousScroll =
+        window.scrollY;
+
+
+    let navTicking =
+        false;
+
+
+    function updateNavbar() {
+
+        if (!nav) return;
+
+
+        const scrollY =
+            window.scrollY;
+
+
+        /* efek navbar scroll */
+
+        nav.classList.toggle(
+            "stuck",
+            scrollY > 50
+        );
+
+
+        /* pindah ke kanan */
+
+        if (
+            scrollY >
+            SIDE_START
+        ) {
+
+            nav.classList.add(
+                "side-mode"
+            );
+
+        } else {
+
+            nav.classList.remove(
+                "side-mode"
+            );
+
+
+            closeNav();
+
+        }
+
+
+        /*
+           Jika navbar sedang terbuka
+           lalu user scroll,
+           navbar otomatis tertutup.
+        */
+
+        if (
+            nav.classList.contains(
+                "open"
+            ) &&
+            Math.abs(
+                scrollY -
+                previousScroll
+            ) > 8
+        ) {
+
+            closeNav();
+
+        }
+
+
+        previousScroll =
+            scrollY;
+
+    }
+
+
+    window.addEventListener(
+
+        "scroll",
+
+        () => {
+
+            if (
+                navTicking
+            ) {
+                return;
+            }
+
+
+            navTicking =
+                true;
+
+
+            requestAnimationFrame(
+                () => {
+
+                    updateNavbar();
+
+
+                    navTicking =
+                        false;
+
+                }
+            );
+
+        },
+
+        {
+            passive: true
+        }
+
+    );
+
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            updateNavbar();
+
+        }
+    );
+
+
+    /* kondisi awal navbar */
+
+    updateNavbar();
+
+
+    /* =========================================================
+       KLIK LINK NAVBAR
+    ========================================================= */
+
+    navLinks.forEach(
+        (link) => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    closeNav();
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =========================================================
+       KLIK LUAR NAVBAR
+    ========================================================= */
+
+    document.addEventListener(
+
+        "click",
+
+        (event) => {
+
+            if (
+                nav &&
+                nav.classList.contains(
+                    "open"
+                ) &&
+                !nav.contains(
+                    event.target
+                )
+            ) {
+
+                closeNav();
+
+            }
+
+        }
+
+    );
+
+
+    /* =========================================================
+       ESC TUTUP NAVBAR
+    ========================================================= */
+
+    document.addEventListener(
+
+        "keydown",
+
+        (event) => {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeNav();
+
+            }
+
+        }
+
+    );
+
+
+    /* =========================================================
+       ACTIVE NAVIGATION
+    ========================================================= */
+
+    if (
+        "IntersectionObserver"
+        in window
+    ) {
+
+        const navObserver =
+            new IntersectionObserver(
+
+                (entries) => {
+
+                    const visible =
+                        entries
+
+                            .filter(
+                                (entry) =>
+                                    entry.isIntersecting
+                            )
+
+                            .sort(
+                                (
+                                    a,
+                                    b
+                                ) =>
+                                    b.intersectionRatio -
+                                    a.intersectionRatio
+                            );
+
+
+                    if (
+                        visible.length ===
+                        0
+                    ) {
+                        return;
+                    }
+
+
+                    const current =
+                        visible[0]
+                            .target;
+
+
+                    navLinks.forEach(
+                        (link) => {
+
+                            link
+                                .classList
+                                .remove(
+                                    "active"
+                                );
+
+                        }
+                    );
+
+
+                    const active =
+                        document.querySelector(
+                            `.nav-link[href="#${current.id}"]`
+                        );
+
+
+                    if (active) {
+
+                        active
+                            .classList
+                            .add(
+                                "active"
+                            );
+
+                    }
+
+                },
+
+                {
+
+                    threshold: [
+                        0.25,
+                        0.45,
+                        0.65
+                    ],
+
+                    rootMargin:
+                        "-15% 0px -45% 0px"
+
+                }
+
+            );
+
+
+        sections.forEach(
+            (section) => {
+
+                navObserver.observe(
+                    section
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =========================================================
+       SCROLL REVEAL
+    ========================================================= */
+
+    if (
+        "IntersectionObserver"
+        in window
+    ) {
+
+        document
+            .querySelectorAll(
+                ".rv"
+            )
+            .forEach(
+                (el) => {
+
+                    const revealObserver =
+                        new IntersectionObserver(
+
+                            (
+                                entries,
+                                observer
+                            ) => {
+
+                                const entry =
+                                    entries[0];
+
+
+                                if (
+                                    entry.isIntersecting
+                                ) {
+
+                                    entry
+                                        .target
+                                        .classList
+                                        .add(
+                                            "vis"
+                                        );
+
+
+                                    observer.unobserve(
+                                        entry.target
+                                    );
+
+                                }
+
+                            },
+
+                            {
+                                threshold: 0.12
+                            }
+
+                        );
+
+
+                    revealObserver.observe(
+                        el
+                    );
+
+                }
+            );
+
+    } else {
+
+        document
+            .querySelectorAll(
+                ".rv"
+            )
+            .forEach(
+                (el) => {
+
+                    el.classList.add(
+                        "vis"
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =========================================================
+       3D CARD TILT
+    ========================================================= */
+
+    document
+        .querySelectorAll(
+            ".pc, .cert-card"
+        )
+        .forEach(
+            (card) => {
+
+                card.style.transition =
+                    "border-color .3s, box-shadow .3s, transform .3s";
+
+
+                card.addEventListener(
+
+                    "mousemove",
+
+                    (e) => {
+
+                        if (
+                            window.innerWidth <
+                            768 ||
+                            touchDevice
+                        ) {
+                            return;
+                        }
+
+
+                        const rect =
+                            card
+                                .getBoundingClientRect();
+
+
+                        const x =
+                            (
+                                e.clientX -
+                                rect.left
+                            ) /
+                            rect.width -
+                            0.5;
+
+
+                        const y =
+                            (
+                                e.clientY -
+                                rect.top
+                            ) /
+                            rect.height -
+                            0.5;
+
+
+                        card.style.transform =
+                            `translateY(-6px) ` +
+                            `rotateX(${-y * 5}deg) ` +
+                            `rotateY(${x * 5}deg)`;
+
+                    }
+
+                );
+
+
+                card.addEventListener(
+                    "mouseleave",
+                    () => {
+
+                        card.style.transform =
+                            "";
+
+                    }
+                );
+
+            }
+        );
+
+
+    /* =========================================================
+       AI CHAT
+    ========================================================= */
+
+    const profile = {
+
+        nama:
+            "Satriya Arif Wibowo",
+
+        umur:
+            "17 Tahun",
+
+        sekolah:
+            "SMK Sejahtera Surabaya sebagai siswa kelas XI jurusan TJKT",
+
+        jurusan:
+            "TJKT ( Teknik Jaringan Komputer dan Telekomunikasi )",
+
+        kelas:
+            "XI TJKT",
+
+        lokasi:
+            "bumi",
+
+        email:
+            "anjaidimasmabarselebew@gmail.com",
+
+        whatsapp:
+            "",
+
+        coding:
+            "dari situ saya tertarik dan masih suka ngoding sampe sekarang",
+
+        penutup:
+            "iya Terima kasih telah mengunjungi portofolio saya. Jika Anda memiliki pertanyaan atau masukan bikin codingan apalagi jangan ragu untuk menghubungi saya melalui email atau media sosial yang tercantum di atas. Saya selalu terbuka untuk peluang baru.",
+
+        role:
+            "Full Stack Developer",
+
+        smp:
+            "",
+
+        makasih:
+            "iyaa",
+
+        salam:
+            "",
+
+        sulit:
+            "",
+
+        ucapan:
+            "",
+
+        kabar:
+            "",
+
+        membuat:
+            "",
+
+        pacar:
+            "",
+
+        developer:
+            "",
+
+        lulus:
+            "",
+
+
+        skill: [
+
+            "HTML",
+
+            "CSS",
+
+            "JavaScript",
+
+            "React",
+
+            "Node.js",
+
+            "Python",
+
+            "MySQL",
+
+            "Git",
+
+            "Tailwind CSS"
+
+        ],
+
+
+        project: [
+
+            "Portfolio Website",
+
+            "Album keluarga",
+
+            "Shoot Love",
+
+            "handmarker",
+
+            "ucapan valentine",
+
+            "laporan sekolah tetapi masih di tahap pengembangan"
+
+        ],
+
+
+        hobi: [
+
+            "Coding",
+
+            "Gaming",
+
+            "jalan jalan",
+
+            "dengerin musik"
+
+        ],
+
+
+        github:
+            "https://github.com/satriya-project",
+
+        instagram:
+            "@exologyoo"
+
+    };
+
+
+    /* =========================================================
+       TAMBAH CHAT
+    ========================================================= */
+
+    function addMsg(
+        role,
+        html
+    ) {
+
+        const box =
+            document.getElementById(
+                "cm"
+            );
+
+
+        if (!box) {
+            return null;
+        }
+
+
+        const d =
+            document.createElement(
+                "div"
+            );
+
+
+        d.className =
+            "msg" +
+            (
+                role === "u"
+                    ? " u"
+                    : ""
+            );
+
+
+        d.innerHTML = `
+
+            <div class="av av-${role}">
+
+                ${
+                    role === "u"
+                        ? "U"
+                        : "AI"
+                }
+
+            </div>
+
+
+            <div class="bub">
+
+                ${html}
+
+            </div>
+
+        `;
+
+
+        box.appendChild(
+            d
+        );
+
+
+        box.scrollTop =
+            box.scrollHeight;
+
+
+        return d;
+
+    }
+
+
+    /* =========================================================
+       TYPING AI
+    ========================================================= */
+
+    function typing() {
+
+        return addMsg(
+
+            "ai",
+
+            `
+                <div class="dots">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+            `
+
+        );
+
+    }
+
+
+    /* =========================================================
+       JAWABAN AI
+    ========================================================= */
+
+    function getAnswer(text) {
+
+        text =
+            text.toLowerCase();
+
+
+        const jawaban = [];
+
+
+        /* NAMA */
+
+        if (
+            text.includes(
+                "nama"
+            ) ||
+            text.includes(
+                "siapa kamu"
+            )
+        ) {
+
+            jawaban.push(
+                `Nama saya <b>${profile.nama}</b>.`
+            );
+
+        }
+
+
+        /* CODING */
+
+        if (
+            text.includes(
+                "coding"
+            ) ||
+            text.includes(
+                "mulai kapan"
+            ) ||
+            text.includes(
+                "ngoding"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                saya memulai coding dari tahun 2025
+                itu karena saya penasaran sama disuruh ayah
+                untuk belajar codingan buat bekal masa depan.
+
+                Saya juga belajar dari Dea Afrizal.
+
+                project awal aku membuat cuman ya gitu foto
+                saya pencet nanti bisa berpindah ke youtube
+                ataupun ke sosmed.
+
+                ${profile.coding}.
+                `
+            );
+
+        }
+
+
+        /* UMUR */
+
+        if (
+            text.includes(
+                "umur"
+            ) ||
+            text.includes(
+                "usia"
+            )
+        ) {
+
+            jawaban.push(
+                `Umur aku masih ${profile.umur}.`
+            );
+
+        }
+
+
+        /* KABAR */
+
+        if (
+            text.includes(
+                "kabar"
+            ) ||
+            text.includes(
+                "sehat"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                masih sehat dan menjalani aktivitas
+                seperti biasanya, ngoding, baca buku,
+                dengerin musik ${profile.kabar}.
+                `
+            );
+
+        }
+
+
+        /* SEKOLAH */
+
+        if (
+            text.includes(
+                "sekolah"
+            ) ||
+            text.includes(
+                "pendidikan"
+            ) ||
+            text.includes(
+                "pelajar"
+            ) ||
+            text.includes(
+                "siswa"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                bersekolah di
+                <b>${profile.sekolah}</b>.
+                `
+            );
+
+        }
+
+
+        /* KULIAH */
+
+        if (
+            text.includes(
+                "setelah lulus"
+            ) ||
+            text.includes(
+                "kuliah"
+            ) ||
+            text.includes(
+                "lanjut kuliah"
+            ) ||
+            text.includes(
+                "lanjut sekolah"
+            ) ||
+            text.includes(
+                "lanjut pendidikan"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                mau kuliah di ITS
+                sebagai mahasiswa IT
+                <b>${profile.lulus}</b>.
+                `
+            );
+
+        }
+
+
+        /* RENCANA */
+
+        if (
+            text.includes(
+                "kedepannya"
+            ) ||
+            text.includes(
+                "mengembangkan"
+            ) ||
+            text.includes(
+                "selanjutnya"
+            ) ||
+            text.includes(
+                "dikembangkan"
+            ) ||
+            text.includes(
+                "planning"
+            ) ||
+            text.includes(
+                "besok"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                pengen buat website besar-besaran..
+                tapi saat ini masih mempelajari
+                yang belum aku ketahui
+                <b>${profile.membuat}</b>.
+                `
+            );
+
+        }
+
+
+        /* KELAS */
+
+        if (
+            text.includes(
+                "kelas"
+            )
+        ) {
+
+            jawaban.push(
+                `kelas ${profile.kelas}.`
+            );
+
+        }
+
+
+        /* JURUSAN */
+
+        if (
+            text.includes(
+                "jurusan"
+            ) ||
+            text.includes(
+                "tjkt"
+            )
+        ) {
+
+            jawaban.push(
+                `jurusan ${profile.jurusan}.`
+            );
+
+        }
+
+
+        /* CERITA SMP */
+
+        if (
+            text.includes(
+                "dulu"
+            ) ||
+            text.includes(
+                "smp"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                iya saya dulu smp sempat ada yang bilang
+                kalo aku adalah seorang bodoh.
+
+                apalagi aku pas smp suka bolos terus tugas
+                gapernah dikerjakan. setiap ada tugas pasti
+                nyontek ke temen.
+
+                terus saat kerja kelompok ketika temen udah
+                dapet kelompok, aku ngerasa kaya gapernah
+                dipilih sama temen-temen.
+
+                terus ada yang pernah bully aku.
+                saat smp sampai dipukul juga pernah.
+
+                terus aku inget sama prinsip orang:
+                "kalo semisal kamu dihina atau dibully,
+                jadikan hinaan itu sebagai motivasi agar
+                saat kamu capek atau ngerasa pengen putus asa
+                itu bisa membuat kamu pengen benar-benar
+                membuktikan."
+
+                <b>${profile.smp}</b>
+                `
+            );
+
+        }
+
+
+        /* PEMBUAT WEBSITE */
+
+        if (
+            text.includes(
+                "pembuat"
+            ) ||
+            text.includes(
+                "pencipta"
+            ) ||
+            text.includes(
+                "pemilik"
+            ) ||
+            text.includes(
+                "dibuat oleh"
+            ) ||
+            text.includes(
+                "dibuat sama siapa"
+            ) ||
+            text.includes(
+                "siapa yang membuat"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                Satriya Arif Wibowo,
+                dia membuatnya seorang diri.
+
+                sekarang si pemilik ingin
+                membuat project baru
+                <b>${profile.developer}</b>.
+                `
+            );
+
+        }
+
+
+        /* LOKASI */
+
+        if (
+            text.includes(
+                "tinggal"
+            ) ||
+            text.includes(
+                "lokasi"
+            ) ||
+            text.includes(
+                "asal"
+            )
+        ) {
+
+            jawaban.push(
+                `berasal dari ${profile.lokasi}.`
+            );
+
+        }
+
+
+        /* SKILL */
+
+        if (
+            text.includes(
+                "skill"
+            ) ||
+            text.includes(
+                "keahlian"
+            ) ||
+            text.includes(
+                "bisa apa"
+            )
+        ) {
+
+            jawaban.push(
+
+                "Skill saya:<br><br>• " +
+
+                profile.skill.join(
+                    "<br>• "
+                )
+
+            );
+
+        }
+
+
+        /* WHATSAPP */
+
+        if (
+            text.includes(
+                "nomor"
+            ) ||
+            text.includes(
+                "whatsapp"
+            ) ||
+            text.includes(
+                "wa"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                <a
+                    href="https://wa.me/6282234668302"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    jika ada pertanyaan atau masukan
+                    bisa hubungi disini
+                    https://wa.me/6282234668302
+                </a>
+
+                <br>
+
+                ${profile.whatsapp}
+                `
+            );
+
+        }
+
+
+        /* TERIMA KASIH */
+
+        if (
+            text.includes(
+                "yaudah"
+            ) ||
+            text.includes(
+                "iyaa"
+            ) ||
+            text.includes(
+                "makasih"
+            ) ||
+            text.includes(
+                "terima kasih"
+            )
+        ) {
+
+            jawaban.push(
+                profile.penutup
+            );
+
+        }
+
+
+        /* OKE */
+
+        if (
+            text.includes(
+                "oke"
+            ) ||
+            text.includes(
+                "oala"
+            ) ||
+            text.includes(
+                "gitu"
+            ) ||
+            text === "ok"
+        ) {
+
+            jawaban.push(
+                profile.makasih
+            );
+
+        }
+
+
+        /* BELAJAR */
+
+        if (
+            text.includes(
+                "belajar selama kamu sulit"
+            ) ||
+            text.includes(
+                "apakah belajar kaya gini"
+            ) ||
+            text.includes(
+                "selama kamu belajar"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                semua tergantung diri sendiri
+                dan seberapa kamu konsistennya
+                ${profile.sulit}
+                `
+            );
+
+        }
+
+
+        /* PROJECT */
+
+        if (
+            text.includes(
+                "project"
+            ) ||
+            text.includes(
+                "portfolio"
+            ) ||
+            text.includes(
+                "karya"
+            )
+        ) {
+
+            jawaban.push(
+
+                "Project yang pernah saya buat:<br><br>• " +
+
+                profile.project.join(
+                    "<br>• "
+                )
+
+            );
+
+        }
+
+
+        /* HOBI */
+
+        if (
+            text.includes(
+                "hobi"
+            )
+        ) {
+
+            jawaban.push(
+
+                "Hobi saya:<br><br>• " +
+
+                profile.hobi.join(
+                    "<br>• "
+                )
+
+            );
+
+        }
+
+
+        /* GITHUB */
+
+        if (
+            text.includes(
+                "github"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                Github :<br>
+
+                <a
+                    href="${profile.github}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    ${profile.github}
+                </a>
+                `
+            );
+
+        }
+
+
+        /* INSTAGRAM */
+
+        if (
+            text.includes(
+                "instagram"
+            ) ||
+            text.includes(
+                "ig"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                jangan lupa difollow ya
+                jangan di stalk doang
+                ${profile.instagram}
+                `
+            );
+
+        }
+
+
+        /* PACAR */
+
+        if (
+            text.includes(
+                "punya"
+            ) ||
+            text.includes(
+                "pacar"
+            ) ||
+            text.includes(
+                "justfriend"
+            ) ||
+            text.includes(
+                "jomblo"
+            ) ||
+            text.includes(
+                "single"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                aku masih single gais
+                blm punya pacar,
+                belakangan aja deh hahaha
+                padahal dalam hati "when ya"
+                ${profile.pacar}
+                `
+            );
+
+        }
+
+
+        /* PUJIAN */
+
+        if (
+            text.includes(
+                "bagus"
+            ) ||
+            text.includes(
+                "keren"
+            ) ||
+            text.includes(
+                "mantap"
+            ) ||
+            text.includes(
+                "wow"
+            ) ||
+            text.includes(
+                "masyaallah"
+            ) ||
+            text.includes(
+                "hebat"
+            ) ||
+            text.includes(
+                "luar biasa"
+            )
+        ) {
+
+            jawaban.push(
+                `
+                alhamdulillah semua kalo ga diiringi
+                dengan doa bakalan sulit..
+
+                btw makasih yaa semoga kamu juga bisa,
+                gaada yang mustahil di dunia ini
+                ${profile.ucapan}
+                `
+            );
+
+        }
+
+
+        /* EMAIL */
+
+        if (
+            text.includes(
+                "email"
+            )
+        ) {
+
+            jawaban.push(
+                `Email saya ${profile.email}`
+            );
+
+        }
+
+
+        /* HALO */
+
+        if (
+            text.includes(
+                "halo"
+            ) ||
+            text.includes(
+                "hai"
+            ) ||
+            text === "hi" ||
+            text.includes(
+                "selamat pagi"
+            ) ||
+            text.includes(
+                "selamat siang"
+            ) ||
+            text.includes(
+                "selamat sore"
+            ) ||
+            text.includes(
+                "selamat malam"
+            )
+        ) {
+
+            jawaban.push(
+                "Halo 👋 Ada yang ingin kamu ketahui tentang saya?"
+            );
+
+        }
+
+
+        /* ASSALAMUALAIKUM */
+
+        if (
+            text.includes(
+                "assalammualaikum"
+            ) ||
+            text.includes(
+                "assalamualaikum"
+            )
+        ) {
+
+            jawaban.push(
+                `waalaikumsalam ${profile.salam}`
+            );
+
+        }
+
+
+        /* TIDAK ADA JAWABAN */
+
+        if (
+            jawaban.length ===
+            0
+        ) {
+
+            return (
+                "Maaf, saya belum mempunyai informasi mengenai pertanyaan tersebut. " +
+                "Coba tanyakan tentang yang lain."
+            );
+
+        }
+
+
+        return jawaban.join(
+            "<br><br>"
+        );
+
+    }
+
+
+    /* =========================================================
+       SEND CHAT
+    ========================================================= */
+
+    function send() {
+
+        const input =
+            document.getElementById(
+                "ci"
+            );
+
+
+        if (!input) {
+            return;
+        }
+
+
+        const txt =
+            input.value.trim();
+
+
+        if (!txt) {
+            return;
+        }
+
+
+        input.value =
+            "";
+
+
+        const suggestions =
+            document.getElementById(
+                "sgg"
+            );
+
+
+        if (suggestions) {
+
+            suggestions.style.display =
+                "none";
+
+        }
+
+
+        addMsg(
+            "u",
+            txt
+        );
+
+
+        const bubble =
+            typing();
+
+
+        setTimeout(
+            () => {
+
+                if (bubble) {
+
+                    bubble.remove();
+
+                }
+
+
+                addMsg(
+                    "ai",
+                    getAnswer(txt)
+                );
+
+            },
+
+            700
+
+        );
+
+    }
+
+
+    /* =========================================================
+       QUICK SEND
+    ========================================================= */
+
+    function qsend(btn) {
+
+        const input =
+            document.getElementById(
+                "ci"
+            );
+
+
+        if (
+            !input ||
+            !btn
+        ) {
+            return;
+        }
+
+
+        input.value =
+            btn.textContent.trim();
+
+
+        send();
+
+    }
+
+
+    /* =========================================================
+       ENTER UNTUK KIRIM
+    ========================================================= */
+
+    const chatInput =
+        document.getElementById(
+            "ci"
+        );
+
+
+    if (chatInput) {
+
+        chatInput.addEventListener(
+
+            "keydown",
+
+            (e) => {
+
+                if (
+                    e.key ===
+                    "Enter"
+                ) {
+
+                    e.preventDefault();
+
+                    send();
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+    /*
+       Tetap dibuat global supaya HTML
+       onclick="send()" dan qsend(this)
+       tetap bisa digunakan.
+    */
+
+    window.send =
+        send;
+
+
+    window.qsend =
+        qsend;
+
+
+    /* =========================================================
+       BACKGROUND MUSIC
+    ========================================================= */
+
+    const backgroundMusic =
+        document.getElementById(
+            "backgroundMusic"
+        );
+
+
+    /* =========================================================
+       LOCAL STORAGE HELPER
+    ========================================================= */
+
+    function storageGet(
+        key,
+        fallback = null
+    ) {
+
+        try {
+
+            const value =
+                localStorage.getItem(
+                    key
+                );
+
+
+            return value === null
+                ? fallback
+                : value;
+
+        } catch (error) {
+
+            return fallback;
+
+        }
+
+    }
+
+
+    function storageSet(
+        key,
+        value
+    ) {
+
+        try {
+
+            localStorage.setItem(
+                key,
+                String(value)
+            );
+
+        } catch (error) {
+
+            /*
+               abaikan jika browser
+               memblokir localStorage
+            */
+
+        }
+
+    }
+
+
+    /* =========================================================
+       MUSIC SYSTEM
+    ========================================================= */
+
+    if (backgroundMusic) {
+
+        backgroundMusic.volume =
+            0.35;
+
+
+        /* posisi lagu terakhir */
+
+        const savedTime =
+            parseFloat(
+
+                storageGet(
+                    "musicCurrentTime",
+                    "0"
+                )
+
+            ) || 0;
+
+
+        /* status terakhir */
+
+        const wasPlaying =
+            storageGet(
+                "musicPlaying",
+                "false"
+            ) === "true";
+
+
+        /* =====================================================
+           RESTORE POSISI MUSIK
+        ===================================================== */
+
+        function restoreMusicTime() {
+
+            if (
+                !Number.isFinite(
+                    savedTime
+                ) ||
+                savedTime <= 0
+            ) {
+
+                return;
+
+            }
+
+
+            try {
+
+                if (
+                    Number.isFinite(
+                        backgroundMusic.duration
+                    ) &&
+                    backgroundMusic.duration >
+                    0
+                ) {
+
+                    backgroundMusic.currentTime =
+                        Math.min(
+
+                            savedTime,
+
+                            Math.max(
+
+                                0,
+
+                                backgroundMusic.duration -
+                                0.1
+
+                            )
+
+                        );
+
+                } else {
+
+                    backgroundMusic.currentTime =
+                        savedTime;
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Posisi musik tidak bisa dikembalikan:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        if (
+            backgroundMusic.readyState >=
+            1
+        ) {
+
+            restoreMusicTime();
+
+        } else {
+
+            backgroundMusic.addEventListener(
+
+                "loadedmetadata",
+
+                restoreMusicTime,
+
+                {
+                    once: true
+                }
+
+            );
+
+        }
+
+
+        /* =====================================================
+           SIMPAN POSISI MUSIK
+        ===================================================== */
+
+        function saveMusicTime() {
+
+            if (
+                Number.isFinite(
+                    backgroundMusic.currentTime
+                )
+            ) {
+
+                storageSet(
+
+                    "musicCurrentTime",
+
+                    backgroundMusic.currentTime
+
+                );
+
+            }
+
+        }
+
+
+        /* =====================================================
+           PLAY MUSIC
+        ===================================================== */
+
+        async function playMusic() {
+
+            try {
+
+                await backgroundMusic.play();
+
+
+                storageSet(
+                    "musicPlaying",
+                    "true"
+                );
+
+
+                return true;
+
+            } catch (error) {
+
+                /*
+                   Browser mungkin memblokir autoplay.
+                   Musik akan dicoba lagi setelah user klik.
+                */
+
+                return false;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           EVENT PLAY
+        ===================================================== */
+
+        backgroundMusic.addEventListener(
+
+            "play",
+
+            () => {
+
+                storageSet(
+                    "musicPlaying",
+                    "true"
+                );
+
+            }
+
+        );
+
+
+        /* =====================================================
+           EVENT PAUSE
+        ===================================================== */
+
+        backgroundMusic.addEventListener(
+
+            "pause",
+
+            () => {
+
+                storageSet(
+                    "musicPlaying",
+                    "false"
+                );
+
+
+                saveMusicTime();
+
+            }
+
+        );
+
+
+        /* =====================================================
+           SIMPAN POSISI BERJALAN
+        ===================================================== */
+
+        backgroundMusic.addEventListener(
+
+            "timeupdate",
+
+            saveMusicTime
+
+        );
+
+
+        backgroundMusic.addEventListener(
+
+            "ended",
+
+            saveMusicTime
+
+        );
+
+
+        /* =====================================================
+           ERROR FILE MUSIK
+        ===================================================== */
+
+        backgroundMusic.addEventListener(
+
+            "error",
+
+            () => {
+
+                console.warn(
+                    "File musik gagal dimuat. Cek nama file, lokasi file, dan type pada tag <source>."
+                );
+
+            }
+
+        );
+
+
+        /* =====================================================
+           SEBELUM KELUAR HALAMAN
+        ===================================================== */
+
+        window.addEventListener(
+
+            "beforeunload",
+
+            saveMusicTime
+
+        );
+
+
+        /* =====================================================
+           LANJUTKAN MUSIK
+        ===================================================== */
+
+        if (wasPlaying) {
+
+            playMusic();
+
+        }
+
+
+        /* =====================================================
+           KLIK PERTAMA = MULAI MUSIK
+        ===================================================== */
+
+        async function startMusicAfterInteraction() {
+
+            const played =
+                await playMusic();
+
+
+            if (!played) {
+                return;
+            }
+
+
+            document.removeEventListener(
+                "click",
+                startMusicAfterInteraction
+            );
+
+
+            document.removeEventListener(
+                "touchstart",
+                startMusicAfterInteraction
+            );
+
+
+            document.removeEventListener(
+                "keydown",
+                startMusicAfterInteraction
+            );
+
+        }
+
+
+        document.addEventListener(
+
+            "click",
+
+            startMusicAfterInteraction
+
+        );
+
+
+        document.addEventListener(
+
+            "touchstart",
+
+            startMusicAfterInteraction,
+
+            {
+                passive: true
+            }
+
+        );
+
+
+        document.addEventListener(
+
+            "keydown",
+
+            startMusicAfterInteraction
+
+        );
+
+    }
+
+})();
